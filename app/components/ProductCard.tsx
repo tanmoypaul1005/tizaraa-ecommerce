@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Star, Heart } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
 import { useRouter } from 'next/navigation';
 
@@ -81,11 +81,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           )}
         </div>
-
-        {/* Wishlist Button */}
-        <button className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:scale-110">
-          <Heart className="w-4 h-4 text-gray-700" />
-        </button>
 
         {/* Quick Add to Cart */}
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
