@@ -39,10 +39,10 @@ const StockStatus: React.FC<StockStatusProps> = ({ status, quantity }) => {
 
   return (
     <div
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${config.bgColor} ${config.textColor} ${config.borderColor}`}
+      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${config?.bgColor} ${config?.textColor} ${config?.borderColor}`}
     >
       {config.icon}
-      <span className="font-medium text-sm">{config.text}</span>
+      <span className="font-medium text-sm">{config?.text}</span>
     </div>
   );
 };

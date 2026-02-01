@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const ServiceWorkerRegister = () => {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
+      navigator?.serviceWorker
         .register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration);
