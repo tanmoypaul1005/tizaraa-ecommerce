@@ -31,6 +31,16 @@ export default function ProductDetailsPage() {
   const [showIncompatibleWarning, setShowIncompatibleWarning] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [productUrl, setProductUrl] = useState('');
+
+  // Set product URL after mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const config = `color=${selectedColor}&material=${selectedMaterial}&size=${selectedSize}`;
+      const url = `${window.location.origin}/product/${productId}?${config}`;
+      setProductUrl(url);
+    }
+  }, [productId, selectedColor, selectedMaterial, selectedSize]);
 
   // Add to recently viewed when product loads
   useEffect(() => {
@@ -238,6 +248,9 @@ export default function ProductDetailsPage() {
               onAddToCart={handleAddToCart}
               onToggleWishlist={handleToggleWishlist}
               onShare={handleShare}
+              productUrl={productUrl}
+              productTitle={`${product.name} - Check out this amazing product!`}
+              productImage={product.images[0].url}
             />
 
             <div className="border-t border-gray-200"></div>
