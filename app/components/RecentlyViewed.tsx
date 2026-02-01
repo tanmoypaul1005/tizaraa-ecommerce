@@ -69,11 +69,11 @@ const RecentlyViewed = () => {
             <Link
               key={item.productId}
               href={`/product/${item.productId}`}
-              className="flex-shrink-0 w-48 group"
+              className="flex-shrink-0 w-48 group flex flex-col"
             >
-              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300">
+              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 h-full flex flex-col">
                 {/* Image */}
-                <div className="relative aspect-square overflow-hidden bg-gray-100">
+                <div className="relative aspect-square overflow-hidden bg-gray-100 flex-shrink-0">
                   <img
                     src={item.image}
                     alt={item.name}
@@ -82,8 +82,8 @@ const RecentlyViewed = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-3">
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                <div className="p-3 flex flex-col flex-grow">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors flex-grow">
                     {item.name}
                   </h3>
                   <p className="text-lg font-bold text-gray-900">
