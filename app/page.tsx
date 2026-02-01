@@ -125,7 +125,9 @@ export default function Home() {
       </section>
 
       {/* Recently Viewed Products */}
+      <div className="px-36">
       <RecentlyViewed />
+      </div>
 
 
       {/* CTA Section */}
