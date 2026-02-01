@@ -77,7 +77,7 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
       key={option.id}
       onClick={() => option.available && onSelect(option.id)}
       disabled={!option.available}
-      className={`w-16 h-12 rounded-lg border-2 transition-all font-semibold ${
+      className={`w-fit px-2 h-12 rounded-lg border-2 transition-all font-semibold ${
         selected === option.id
           ? 'border-blue-600 bg-blue-600 text-white'
           : 'border-gray-300 hover:border-gray-400 text-gray-700'
