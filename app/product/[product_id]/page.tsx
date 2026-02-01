@@ -10,6 +10,7 @@ import ProductAccordion from '@/app/components/ProductAccordion';
 import StockStatus, { StockStatusType } from '@/app/components/StockStatus';
 import ProductRating from '@/app/components/ProductRating';
 import CustomizationSummary from '@/app/components/CustomizationSummary';
+import RecentlyViewed from '@/app/components/RecentlyViewed';
 import { AlertTriangle } from 'lucide-react';
 import { getProductById } from '@/app/data/products';
 import { useCartStore } from '@/app/store/cartStore';
@@ -310,6 +311,9 @@ export default function ProductDetailsPage() {
           </button>
         </div>
       </div>
+
+      {/* Recently Viewed Products */}
+      <RecentlyViewed />
     </div>
   );
 }

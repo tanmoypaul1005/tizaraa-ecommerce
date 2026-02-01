@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProductCard from "./components/ProductCard";
+import RecentlyViewed from "./components/RecentlyViewed";
 import { getFeaturedProducts } from "./data/products";
 import { Sparkles, Zap, Shield, Truck } from "lucide-react";
 
@@ -122,6 +123,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Recently Viewed Products */}
+      <RecentlyViewed />
 
 
       {/* CTA Section */}
