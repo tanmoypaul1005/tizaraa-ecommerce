@@ -19,6 +19,23 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setMousePosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
 
   const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
@@ -49,15 +66,31 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
   return (
     <div className="space-y-4">
       {/* Main Image Display */}
-      <div className="relative bg-gray-50 rounded-2xl overflow-hidden aspect-square group">
+      <div 
+        className="relative bg-gray-50 rounded-2xl overflow-hidden aspect-square group cursor-crosshair"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <div className="absolute inset-0 flex items-center justify-center p-8">
           <img
             src={images[selectedIndex]?.url || '/api/placeholder/800/800'}
             alt={images[selectedIndex]?.alt || 'Product'}
-            className="max-w-full max-h-full object-contain transition-transform duration-300"
-            style={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
+            className="max-w-full max-h-full object-contain transition-all duration-200"
+            style={{ 
+              transform: `scale(${isHovering ? 2 : zoom}) rotate(${rotation}deg)`,
+              transformOrigin: isHovering ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
+            }}
           />
         </div>
+
+        {/* Zoom Indicator */}
+        {isHovering && (
+          <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
+            <ZoomIn className="w-3 h-3" />
+            Zoomed 2x
+          </div>
+        )}
 
         {/* Navigation Arrows */}
         {images.length > 1 && (
