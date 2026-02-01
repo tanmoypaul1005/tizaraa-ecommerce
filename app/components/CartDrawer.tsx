@@ -88,9 +88,9 @@ export const CartDrawer: React.FC = () => {
           </div>
           <button
             onClick={closeCart}
-            className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+            className="w-8 h-8 cursor-pointer rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-black" />
           </button>
         </div>
 

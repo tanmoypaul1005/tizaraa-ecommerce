@@ -13,18 +13,19 @@ import CustomizationSummary from '@/app/components/CustomizationSummary';
 import { AlertTriangle } from 'lucide-react';
 import { getProductById } from '@/app/data/products';
 import { useCartStore } from '@/app/store/cartStore';
+import { useWishlistStore } from '@/app/store/wishlistStore';
 
 export default function ProductDetailsPage() {
   const params = useParams();
   const productId = params.product_id as string;
   const product = getProductById(productId);
   const { addItem, addRecentlyViewed, openCart } = useCartStore();
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
 
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [isInWishlist, setIsInWishlist] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(0);
   const [stockStatus, setStockStatus] = useState<StockStatusType>('in-stock');
   const [stockQuantity, setStockQuantity] = useState(15);
@@ -32,6 +33,9 @@ export default function ProductDetailsPage() {
   const [isSticky, setIsSticky] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [productUrl, setProductUrl] = useState('');
+
+  // Check if product is in wishlist
+  const productInWishlist = product ? isInWishlist(product.id) : false;
 
   // Set product URL after mount
   useEffect(() => {
@@ -162,8 +166,18 @@ export default function ProductDetailsPage() {
 
   const handleToggleWishlist = async () => {
     if (!product) return;
-    setIsInWishlist(!isInWishlist);
-    // TODO: Implement wishlist persistence
+    
+    try {
+      await toggleWishlist({
+        productId: product.id,
+        name: product.name,
+        image: product.images[0].url,
+        price: currentPrice,
+      });
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+      alert(`Failed to update wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleShare = () => {
@@ -259,7 +273,7 @@ export default function ProductDetailsPage() {
 
             <ProductActions
               isAvailable={isAvailable}
-              isInWishlist={isInWishlist}
+              isInWishlist={productInWishlist}
               onAddToCart={handleAddToCart}
               onToggleWishlist={handleToggleWishlist}
               onShare={handleShare}

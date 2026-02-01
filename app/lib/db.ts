@@ -1,9 +1,10 @@
 // IndexedDB utility for persistent cart storage
 const DB_NAME = 'TizaraaDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const CART_STORE = 'cart';
 const SAVED_STORE = 'savedForLater';
 const RECENT_STORE = 'recentlyViewed';
+const WISHLIST_STORE = 'wishlist';
 
 export interface CartItem {
   id: string;
@@ -29,6 +30,14 @@ export interface RecentlyViewedItem {
   image: string;
   price: number;
   viewedAt: number;
+}
+
+export interface WishlistItem {
+  productId: string;
+  name: string;
+  image: string;
+  price: number;
+  addedAt: number;
 }
 
 class CartDB {
@@ -74,6 +83,12 @@ class CartDB {
         if (!db.objectStoreNames.contains(RECENT_STORE)) {
           const recentStore = db.createObjectStore(RECENT_STORE, { keyPath: 'productId' });
           recentStore.createIndex('viewedAt', 'viewedAt', { unique: false });
+        }
+
+        // Wishlist store
+        if (!db.objectStoreNames.contains(WISHLIST_STORE)) {
+          const wishlistStore = db.createObjectStore(WISHLIST_STORE, { keyPath: 'productId' });
+          wishlistStore.createIndex('addedAt', 'addedAt', { unique: false });
         }
       };
     });
@@ -194,6 +209,43 @@ class CartDB {
       for (const item of toRemove) {
         await this.delete(RECENT_STORE, item.productId);
       }
+    }
+  }
+
+  // Wishlist methods
+  async getWishlist(): Promise<WishlistItem[]> {
+    const items = await this.getAll<WishlistItem>(WISHLIST_STORE);
+    return items.sort((a, b) => b.addedAt - a.addedAt);
+  }
+
+  async addToWishlist(item: WishlistItem): Promise<void> {
+    try {
+      await this.init();
+      await this.set(WISHLIST_STORE, item);
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      throw new Error(`Failed to add to wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async removeFromWishlist(productId: string): Promise<void> {
+    try {
+      await this.init();
+      await this.delete(WISHLIST_STORE, productId);
+    } catch (error) {
+      console.error('Error removing from wishlist:', error);
+      throw new Error(`Failed to remove from wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async isInWishlist(productId: string): Promise<boolean> {
+    try {
+      await this.init();
+      const item = await this.get<WishlistItem>(WISHLIST_STORE, productId);
+      return !!item;
+    } catch (error) {
+      console.error('Error checking wishlist:', error);
+      return false;
     }
   }
 }
