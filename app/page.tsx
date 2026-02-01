@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "./components/Footer";
 
 // Mock product data
 const products = [
@@ -124,13 +125,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8 mt-16">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-gray-600">
-            Built with Next.js 14 · React 18 · TypeScript · Zustand · React Three Fiber
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
