@@ -12,11 +12,13 @@ import ProductRating from '@/app/components/ProductRating';
 import CustomizationSummary from '@/app/components/CustomizationSummary';
 import { AlertTriangle } from 'lucide-react';
 import { getProductById } from '@/app/data/products';
+import { useCartStore } from '@/app/store/cartStore';
 
 export default function ProductDetailsPage() {
   const params = useParams();
   const productId = params.product_id as string;
   const product = getProductById(productId);
+  const { addItem, addRecentlyViewed, openCart } = useCartStore();
 
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState('');
@@ -28,6 +30,19 @@ export default function ProductDetailsPage() {
   const [stockQuantity, setStockQuantity] = useState(15);
   const [showIncompatibleWarning, setShowIncompatibleWarning] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  // Add to recently viewed when product loads
+  useEffect(() => {
+    if (product) {
+      addRecentlyViewed({
+        productId: product.id,
+        name: product.name,
+        image: product.images[0].url,
+        price: product.basePrice,
+      });
+    }
+  }, [product, addRecentlyViewed]);
 
   useEffect(() => {
     if (product) {
@@ -96,16 +111,32 @@ export default function ProductDetailsPage() {
 
   const isAvailable = stockStatus !== 'out-of-stock' && !showIncompatibleWarning;
 
-  const handleAddToCart = () => {
-    if (!isAvailable) return;
-    console.log('Adding to cart:', {
-      product: product.id,
-      color: selectedColor,
-      material: selectedMaterial,
-      size: selectedSize,
-      quantity,
-      price: currentPrice
-    });
+  const handleAddToCart = async () => {
+    if (!isAvailable || !product) return;
+    
+    setIsAddingToCart(true);
+    
+    try {
+      await addItem({
+        productId: product.id,
+        name: product.name,
+        image: product.images[0].url,
+        price: currentPrice,
+        quantity,
+        selectedColor: product.variants.colors.find(c => c.id === selectedColor)?.name,
+        selectedMaterial: product.variants.materials.find(m => m.id === selectedMaterial)?.name,
+        selectedSize,
+        maxQuantity: stockQuantity,
+      });
+      
+      // Open cart drawer to show the added item
+      openCart();
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   const handleToggleWishlist = () => setIsInWishlist(!isInWishlist);

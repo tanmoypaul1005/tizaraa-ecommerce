@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartBadge } from "./CartBadge";
 
 const Navbar = () => {
     return (
@@ -8,19 +9,14 @@ const Navbar = () => {
                     <Link href="/" className="text-2xl font-bold text-gray-900">
                         Tizaraa
                     </Link>
-                    <div className="flex gap-6">
+                    <div className="flex items-center gap-6">
                         <Link
                             href="/products"
                             className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
                         >
                             Products
                         </Link>
-                        <Link
-                            href="/cart"
-                            className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
-                        >
-                            Cart
-                        </Link>
+                        <CartBadge />
                     </div>
                 </div>
             </div>

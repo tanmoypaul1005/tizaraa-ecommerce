@@ -7,6 +7,7 @@ import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import OnlineStatus from "./components/OnlineStatus";
 import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import UpdateNotification from "./components/UpdateNotification";
+import { CartDrawer } from "./components/CartDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,6 +79,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <PWAInstallPrompt />
+        <CartDrawer />
       </body>
     </html>
   );

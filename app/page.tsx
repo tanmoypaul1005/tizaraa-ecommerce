@@ -104,18 +104,18 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 px-36">
             {featuredProducts.map((product) => (
               <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                shortDescription={product.shortDescription}
-                basePrice={product.basePrice}
-                compareAtPrice={product.compareAtPrice}
-                rating={product.rating}
-                reviewCount={product.reviewCount}
-                image={product.images[0].url}
-                category={product.category}
-                tags={product.tags}
-                inStock={product.inStock}
+                key={product?.id}
+                id={product?.id}
+                name={product?.name}
+                shortDescription={product?.shortDescription}
+                basePrice={product?.basePrice}
+                compareAtPrice={product?.compareAtPrice}
+                rating={product?.rating}
+                reviewCount={product?.reviewCount}
+                image={product?.images[0].url}
+                category={product?.category}
+                tags={product?.tags}
+                inStock={product?.inStock}
               />
             ))}
           </div>
