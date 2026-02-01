@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import ProductImageGallery from '@/app/components/ProductImageGallery';
 import VariantSelector from '@/app/components/VariantSelector';
 import QuantitySelector from '@/app/components/QuantitySelector';
@@ -18,6 +18,8 @@ import { useWishlistStore } from '@/app/store/wishlistStore';
 
 export default function ProductDetailsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const productId = params.product_id as string;
   const product = getProductById(productId);
   const { addItem, addRecentlyViewed, openCart } = useCartStore();
@@ -38,14 +40,23 @@ export default function ProductDetailsPage() {
   // Check if product is in wishlist
   const productInWishlist = product ? isInWishlist(product.id) : false;
 
-  // Set product URL after mount
+  // Update URL when configuration changes (without page reload)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const config = `color=${selectedColor}&material=${selectedMaterial}&size=${selectedSize}`;
-      const url = `${window.location.origin}/product/${productId}?${config}`;
-      setProductUrl(url);
+    if (selectedColor && selectedMaterial && selectedSize && typeof window !== 'undefined') {
+      const params = new URLSearchParams();
+      params.set('color', selectedColor);
+      params.set('material', selectedMaterial);
+      params.set('size', selectedSize);
+      
+      // Update URL without reload
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+      
+      // Set shareable URL
+      const shareUrl = `${window.location.origin}${newUrl}`;
+      setProductUrl(shareUrl);
     }
-  }, [productId, selectedColor, selectedMaterial, selectedSize]);
+  }, [selectedColor, selectedMaterial, selectedSize]);
 
   // Add to recently viewed when product loads
   useEffect(() => {
@@ -59,15 +70,37 @@ export default function ProductDetailsPage() {
     }
   }, [product, addRecentlyViewed]);
 
+  // Load configuration from URL parameters or set defaults
   useEffect(() => {
     if (product) {
-      const firstAvailableColor = product.variants.colors.find(c => c.available);
-      const firstAvailableMaterial = product.variants.materials.find(m => m.available);
-      const firstAvailableSize = product.variants.sizes.find(s => s.available);
+      // Try to load from URL parameters
+      const urlColor = searchParams.get('color');
+      const urlMaterial = searchParams.get('material');
+      const urlSize = searchParams.get('size');
 
-      if (firstAvailableColor) setSelectedColor(firstAvailableColor.id);
-      if (firstAvailableMaterial) setSelectedMaterial(firstAvailableMaterial.id);
-      if (firstAvailableSize) setSelectedSize(firstAvailableSize.id);
+      // Validate and set color from URL or use first available
+      if (urlColor && product.variants.colors.find(c => c.id === urlColor && c.available)) {
+        setSelectedColor(urlColor);
+      } else {
+        const firstAvailableColor = product.variants.colors.find(c => c.available);
+        if (firstAvailableColor) setSelectedColor(firstAvailableColor.id);
+      }
+
+      // Validate and set material from URL or use first available
+      if (urlMaterial && product.variants.materials.find(m => m.id === urlMaterial && m.available)) {
+        setSelectedMaterial(urlMaterial);
+      } else {
+        const firstAvailableMaterial = product.variants.materials.find(m => m.available);
+        if (firstAvailableMaterial) setSelectedMaterial(firstAvailableMaterial.id);
+      }
+
+      // Validate and set size from URL or use first available
+      if (urlSize && product.variants.sizes.find(s => s.id === urlSize && s.available)) {
+        setSelectedSize(urlSize);
+      } else {
+        const firstAvailableSize = product.variants.sizes.find(s => s.available);
+        if (firstAvailableSize) setSelectedSize(firstAvailableSize.id);
+      }
 
       setCurrentPrice(product.basePrice);
       setStockQuantity(product.stockQuantity);
@@ -76,7 +109,7 @@ export default function ProductDetailsPage() {
         product.stockQuantity > 0 ? 'low-stock' : 'out-of-stock'
       );
     }
-  }, [product]);
+  }, [product, searchParams]);
 
   useEffect(() => {
     if (!product) return;

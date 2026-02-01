@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShoppingCart, Heart, Share2, Facebook, MessageCircle, Linkedin, Mail, Link2, X } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Facebook, MessageCircle, Linkedin, Mail, Link2, X, Check } from 'lucide-react';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -32,10 +32,15 @@ const ProductActions: React.FC<ProductActionsProps> = ({
   productImage = '',
 }) => {
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const handleCopyLink = () => {
     onShare(); // This copies to clipboard
-    setShowShareMenu(false);
+    setLinkCopied(true);
+    setTimeout(() => {
+      setLinkCopied(false);
+      setShowShareMenu(false);
+    }, 2000);
   };
 
   const shareButtons = [
@@ -125,8 +130,9 @@ const ProductActions: React.FC<ProductActionsProps> = ({
               
               {/* Share Menu */}
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 z-[70] overflow-hidden">
-                <div className="p-3 border-b border-gray-100">
-                  <h3 className="font-semibold text-gray-900 text-sm">Share this product</h3>
+                <div className="p-3 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1">Share Your Design</h3>
+                  <p className="text-xs text-gray-600">Share this exact configuration with others</p>
                 </div>
                 
                 <div className="p-2 space-y-1">
@@ -151,10 +157,23 @@ const ProductActions: React.FC<ProductActionsProps> = ({
                   <button
                     type="button"
                     onClick={handleCopyLink}
-                    className="w-full px-3 py-2.5 rounded-lg flex items-center gap-3 text-gray-700 hover:bg-gray-100 transition-all"
+                    className={`w-full px-3 py-2.5 rounded-lg flex items-center gap-3 transition-all ${
+                      linkCopied
+                        ? 'bg-green-50 text-green-700'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
                   >
-                    <Link2 className="w-5 h-5" />
-                    <span className="font-medium text-sm">Copy Link</span>
+                    {linkCopied ? (
+                      <>
+                        <Check className="w-5 h-5" />
+                        <span className="font-medium text-sm">Link Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Link2 className="w-5 h-5" />
+                        <span className="font-medium text-sm">Copy Configuration Link</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
