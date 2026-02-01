@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, Star, Heart } from 'lucide-react';
 import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   id: string;
@@ -37,8 +38,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
     ? Math.round(((compareAtPrice - basePrice) / compareAtPrice) * 100)
     : 0;
 
+  const router = useRouter();
+
+  // Prefetch on hover for faster navigation
+  const handleMouseEnter = () => {
+    router.prefetch(`/product/${id}`);
+  };
+
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
+    <div 
+      className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+      onMouseEnter={handleMouseEnter}
+    >
       {/* Image Section */}
       <Link href={`/product/${id}`} className="block relative aspect-square overflow-hidden bg-gray-50">
         <Image
