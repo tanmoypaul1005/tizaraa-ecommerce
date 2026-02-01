@@ -1,99 +1,153 @@
 import Link from "next/link";
-
-// Mock product data
-const products = [
-  { id: 1, name: "Custom T-Shirt", price: 29.99, rating: 4.5 },
-  { id: 2, name: "Customizable Mug", price: 14.99, rating: 4.8 },
-  { id: 3, name: "Personalized Phone Case", price: 19.99, rating: 4.6 },
-  { id: 4, name: "Custom Hoodie", price: 49.99, rating: 4.7 },
-  { id: 5, name: "Design Your Cap", price: 24.99, rating: 4.4 },
-  { id: 6, name: "Custom Backpack", price: 39.99, rating: 4.9 },
-  { id: 7, name: "Personalized Notebook", price: 12.99, rating: 4.5 },
-  { id: 8, name: "Custom Water Bottle", price: 16.99, rating: 4.6 },
-];
+import ProductCard from "./components/ProductCard";
+import { getFeaturedProducts } from "./data/products";
+import { Sparkles, Zap, Shield, Truck } from "lucide-react";
 
 export default function Home() {
+  const featuredProducts = getFeaturedProducts(6);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Product Banner */}
-      <section className="bg-gradient-to-b from-blue-50 to-white py-16 sm:py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              3D Product Customization for Modern E-Commerce
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00em0wLTEwYzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHptMC0xMGMwLTIuMjEtMS43OS00LTQtNHMtNCAxLjc5LTQgNCAxLjc5IDQgNCA0IDQtMS43OSA0LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+
+        <div className="relative container mx-auto px-4 py-20 md:py-32">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium">
+              <Sparkles className="w-4 h-4" />
+              <span>Premium Customizable Products</span>
+            </div>
+
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              Design Your Perfect
+              <span className="block bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-transparent">
+                Custom Product
+              </span>
             </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Real-time customization, dynamic pricing, and advanced cart management.
+
+            <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+              Real-time 3D customization, dynamic pricing, and premium quality.
+              Create something truly unique with our advanced product builder.
             </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link
+                href="/product/01"
+                className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-all shadow-2xl hover:shadow-3xl hover:scale-105 active:scale-95"
+              >
+                <Zap className="w-5 h-5" />
+                Start Customizing
+              </Link>
+
+              <Link
+                href="#products"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/20 transition-all border-2 border-white/20"
+              >
+                Browse Products
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Wave Divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z" fill="white" />
+          </svg>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className="text-center space-y-3">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto">
+                <Sparkles className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-900">Real-Time Customization</h3>
+              <p className="text-gray-600 text-sm">See your changes instantly with our 3D preview</p>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto">
+                <Shield className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-900">Premium Quality</h3>
+              <p className="text-gray-600 text-sm">100% satisfaction guarantee on all products</p>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto">
+                <Truck className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-900">Fast Shipping</h3>
+              <p className="text-gray-600 text-sm">Free delivery on orders over $50</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Products Section */}
+      <section id="products" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 space-y-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+              Featured Products
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore our collection of premium customizable products
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {featuredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                shortDescription={product.shortDescription}
+                basePrice={product.basePrice}
+                compareAtPrice={product.compareAtPrice}
+                rating={product.rating}
+                reviewCount={product.reviewCount}
+                image={product.images[0].url}
+                category={product.category}
+                tags={product.tags}
+                inStock={product.inStock}
+              />
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
             <Link
-              href="/products/1"
-              className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+              href="/products"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
             >
-              Start Customizing
+              View All Products
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Product List */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Featured Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
-              >
-                {/* Product Image Placeholder */}
-                <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                  <svg
-                    className="w-16 h-16 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
-                </div>
-
-                {/* Product Details */}
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xl font-bold text-gray-900">
-                      ${product.price}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <svg
-                        className="w-4 h-4 text-yellow-400 fill-current"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                      <span className="text-sm text-gray-600">
-                        {product.rating}
-                      </span>
-                    </div>
-                  </div>
-                  <Link
-                    href={`/product/${product.id}`}
-                    className="block w-full py-2 bg-gray-900 text-white text-center font-medium rounded-md hover:bg-gray-800 transition-colors"
-                  >
-                    Customize
-                  </Link>
-                </div>
-              </div>
-            ))}
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Ready to Create Something Amazing?
+            </h2>
+            <p className="text-lg text-blue-100">
+              Start designing your custom product today and bring your vision to life
+            </p>
+            <Link
+              href="/product/01"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95"
+            >
+              <Sparkles className="w-5 h-5" />
+              Get Started Now
+            </Link>
           </div>
         </div>
       </section>
