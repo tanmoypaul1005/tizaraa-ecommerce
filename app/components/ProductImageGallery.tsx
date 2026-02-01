@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Maximize2, ZoomIn, RotateCw, X } from 'lucide-react';
+import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 interface ProductImage {
   id: string;
@@ -73,14 +75,20 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
         onMouseLeave={handleMouseLeave}
       >
         <div className="absolute inset-0 flex items-center justify-center p-8">
-          <img
+          <Image
             src={images[selectedIndex]?.url || '/api/placeholder/800/800'}
             alt={images[selectedIndex]?.alt || 'Product'}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
             className="max-w-full max-h-full object-contain transition-all duration-200"
             style={{ 
               transform: `scale(${isHovering ? 2 : zoom}) rotate(${rotation}deg)`,
               transformOrigin: isHovering ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
             }}
+            priority={selectedIndex === 0}
+            placeholder="blur"
+            blurDataURL={shimmerBlurDataUrl}
+            quality={85}
           />
         </div>
 
@@ -153,10 +161,15 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <img
+            <Image
               src={image.url}
               alt={image.alt}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 20vw, 10vw"
+              className="object-cover"
+              placeholder="blur"
+              blurDataURL={shimmerBlurDataUrl}
+              quality={60}
             />
             {image.type === 'video' && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
@@ -180,12 +193,18 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
           </button>
 
           <div className="relative w-full h-full flex items-center justify-center p-12">
-            <img
-              src={images[selectedIndex]?.url || '/api/placeholder/800/800'}
-              alt={images[selectedIndex]?.alt || 'Product'}
-              className="max-w-full max-h-full object-contain transition-transform duration-300"
-              style={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
-            />
+            <div className="relative w-full h-full">
+              <Image
+                src={images[selectedIndex]?.url || '/api/placeholder/800/800'}
+                alt={images[selectedIndex]?.alt || 'Product'}
+                fill
+                sizes="100vw"
+                className="object-contain transition-transform duration-300"
+                style={{ transform: `scale(${zoom}) rotate(${rotation}deg)` }}
+                priority
+                quality={95}
+              />
+            </div>
           </div>
 
           {/* Fullscreen Controls */}

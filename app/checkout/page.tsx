@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useCartStore } from '@/app/store/cartStore';
 import { ShoppingBag, User, MapPin, Phone, CreditCard, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -305,11 +307,16 @@ const CheckoutPage = () => {
                 <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                   {items.map((item) => (
                     <div key={item.id} className="flex gap-3">
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
-                        <img 
+                      <div className="relative w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
+                        <Image
                           src={item.image} 
                           alt={item.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                          placeholder="blur"
+                          blurDataURL={shimmerBlurDataUrl}
+                          quality={60}
                         />
                       </div>
                       <div className="flex-1 min-w-0">

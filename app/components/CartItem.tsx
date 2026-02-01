@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { X, Plus, Minus, Trash2, Heart, AlertTriangle } from 'lucide-react';
 import { CartItem } from '../lib/db';
 import { useCartStore } from '../store/cartStore';
+import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 interface CartItemComponentProps {
   item: CartItem;
@@ -53,6 +54,9 @@ export const CartItemComponent: React.FC<CartItemComponentProps> = ({ item }) =>
           fill
           className="object-cover"
           sizes="80px"
+          placeholder="blur"
+          blurDataURL={shimmerBlurDataUrl}
+          quality={70}
         />
       </div>
 
