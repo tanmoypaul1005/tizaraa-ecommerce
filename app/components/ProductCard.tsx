@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, Star, Heart } from 'lucide-react';
+import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
 
 interface ProductCardProps {
   id: string;
@@ -46,6 +47,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          placeholder="blur"
+          blurDataURL={shimmerBlurDataUrl}
+          quality={80}
         />
         
         {/* Badges */}
