@@ -147,7 +147,13 @@ class CartDB {
   }
 
   async saveCartItem(item: CartItem): Promise<void> {
-    return this.set(CART_STORE, item);
+    try {
+      await this.init(); // Ensure DB is initialized
+      return this.set(CART_STORE, item);
+    } catch (error) {
+      console.error('Error saving cart item:', error);
+      throw new Error(`Failed to save cart item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   async removeCartItem(id: string): Promise<void> {

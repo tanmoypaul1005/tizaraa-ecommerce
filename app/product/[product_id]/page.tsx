@@ -127,6 +127,16 @@ export default function ProductDetailsPage() {
     setIsAddingToCart(true);
     
     try {
+      console.log('Adding to cart:', {
+        productId: product.id,
+        name: product.name,
+        price: currentPrice,
+        quantity,
+        selectedColor: product.variants.colors.find(c => c.id === selectedColor)?.name,
+        selectedMaterial: product.variants.materials.find(m => m.id === selectedMaterial)?.name,
+        selectedSize,
+      });
+
       await addItem({
         productId: product.id,
         name: product.name,
@@ -139,17 +149,22 @@ export default function ProductDetailsPage() {
         maxQuantity: stockQuantity,
       });
       
+      console.log('Item added successfully');
       // Open cart drawer to show the added item
       openCart();
     } catch (error) {
       console.error('Failed to add to cart:', error);
-      alert('Failed to add item to cart. Please try again.');
+      alert(`Failed to add item to cart: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsAddingToCart(false);
     }
   };
 
-  const handleToggleWishlist = () => setIsInWishlist(!isInWishlist);
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+    setIsInWishlist(!isInWishlist);
+    // TODO: Implement wishlist persistence
+  };
 
   const handleShare = () => {
     const config = `color=${selectedColor}&material=${selectedMaterial}&size=${selectedSize}`;

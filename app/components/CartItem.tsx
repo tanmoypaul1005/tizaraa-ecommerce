@@ -97,15 +97,15 @@ export const CartItemComponent: React.FC<CartItemComponentProps> = ({ item }) =>
               disabled={isUpdating || item.quantity <= 1}
               className="w-7 h-7 rounded-md border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <Minus className="w-3 h-3" />
+              <Minus className="w-3 h-3 text-black" />
             </button>
-            <span className="w-8 text-center font-medium text-sm">{item.quantity}</span>
+            <span className="w-8 text-center font-medium text-sm text-black">{item?.quantity}</span>
             <button
               onClick={() => handleQuantityChange(item.quantity + 1)}
               disabled={isUpdating || item.quantity >= item.maxQuantity}
               className="w-7 h-7 rounded-md border border-gray-300 flex items-center justify-center hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              <Plus className="w-3 h-3" />
+              <Plus className="w-3 h-3 text-black" />
             </button>
           </div>
 

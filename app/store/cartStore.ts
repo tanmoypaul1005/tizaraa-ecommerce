@@ -111,23 +111,29 @@ export const useCartStore = create<CartState>((set, get) => {
 
     // Add item to cart
     addItem: async (itemData) => {
-      const { items } = get();
-      
-      // Generate unique ID based on product and variants
-      const variantKey = `${itemData.selectedColor || ''}-${itemData.selectedMaterial || ''}-${itemData.selectedSize || ''}`;
-      const id = `${itemData.productId}-${variantKey}`;
-      
-      // Check if item already exists
-      const existingItem = items.find(item => item.id === id);
-      
-      if (existingItem) {
-        // Update quantity if item exists
-        const newQuantity = Math.min(
-          existingItem.quantity + itemData.quantity,
-          itemData.maxQuantity
-        );
-        await get().updateQuantity(id, newQuantity);
-      } else {
+      try {
+        // Ensure DB is initialized
+        await cartDB.init();
+        
+        const { items } = get();
+        
+        // Generate unique ID based on product and variants
+        const variantKey = `${itemData.selectedColor || ''}-${itemData.selectedMaterial || ''}-${itemData.selectedSize || ''}`;
+        const id = `${itemData.productId}-${variantKey}`;
+        
+        // Check if item already exists
+        const existingItem = items.find(item => item.id === id);
+        
+        if (existingItem) {
+          // Update quantity if item exists
+          const newQuantity = Math.min(
+            existingItem.quantity + itemData.quantity,
+            itemData.maxQuantity
+          );
+          await get().updateQuantity(id, newQuantity);
+          return;
+        }
+        
         // Add new item
         const newItem: CartItem = {
           ...itemData,
@@ -148,6 +154,9 @@ export const useCartStore = create<CartState>((set, get) => {
           console.error('Failed to add item to cart:', error);
           throw error;
         }
+      } catch (error) {
+        console.error('Failed to initialize cart:', error);
+        throw new Error('Unable to add item to cart. Please refresh the page and try again.');
       }
     },
 

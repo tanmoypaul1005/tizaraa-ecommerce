@@ -83,7 +83,7 @@ export const CartDrawer: React.FC = () => {
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-gray-700" />
             <h2 className="text-lg font-bold text-gray-900">
-              Shopping Cart ({items.length})
+              Shopping Cart ({items?.length})
             </h2>
           </div>
           <button
@@ -145,13 +145,13 @@ export const CartDrawer: React.FC = () => {
             <div>
               {/* Cart Items */}
               <div>
-                {items.map((item) => (
+                {items?.map((item) => (
                   <CartItemComponent key={item.id} item={item} />
                 ))}
               </div>
 
               {/* Saved for Later */}
-              {savedItems.length > 0 && (
+              {savedItems?.length > 0 && (
                 <div className="mt-4 p-4 bg-gray-50">
                   <h3 className="text-sm font-semibold text-gray-900 mb-3">
                     Saved for Later ({savedItems.length})
@@ -168,7 +168,7 @@ export const CartDrawer: React.FC = () => {
         </div>
 
         {/* Footer - Promo Code and Totals */}
-        {items.length > 0 && (
+        {items?.length > 0 && (
           <div className="border-t border-gray-200 p-4 space-y-4">
             {/* Promo Code */}
             <div>
