@@ -88,15 +88,6 @@ export default function Home() {
               />
             ))}
           </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
-            >
-              View All Products
-            </Link>
-          </div>
         </div>
       </section>
 
