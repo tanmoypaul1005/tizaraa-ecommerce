@@ -36,9 +36,9 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   };
 
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-semibold text-gray-900">Quantity</label>
-      <div className="inline-flex items-center border-2 border-gray-200 rounded-xl overflow-hidden">
+    <div className="space-y-2 gap-x-4 flex items-center">
+      <div className="text-sm font-semibold text-gray-900 ">Quantity</div>
+      <div className="inline-flex items-center border-2 border-gray-200 rounded-xl overflow-hidden ">
         <button
           onClick={handleDecrement}
           disabled={quantity <= min}
