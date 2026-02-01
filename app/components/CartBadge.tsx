@@ -6,7 +6,7 @@ import { useCartStore } from '../store/cartStore';
 
 export const CartBadge: React.FC = () => {
   const { items, openCart } = useCartStore();
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const itemCount = items?.length 
 
   return (
     <button
