@@ -112,7 +112,7 @@ export default function Home() {
                     </div>
                   </div>
                   <Link
-                    href={`/products/${product.id}`}
+                    href={`/product/${product.id}`}
                     className="block w-full py-2 bg-gray-900 text-white text-center font-medium rounded-md hover:bg-gray-800 transition-colors"
                   >
                     Customize
