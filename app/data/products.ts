@@ -303,3 +303,42 @@ export const getFeaturedProducts = (limit: number = 6): Product[] => {
 export const getProductsByCategory = (category: string): Product[] => {
   return MOCK_PRODUCTS.filter(product => product.category === category);
 };
+
+// Helper function to sort products
+export const sortProducts = (products: Product[], sortBy: string): Product[] => {
+  const sorted = [...products];
+  
+  switch (sortBy) {
+    case 'price-low-high':
+      return sorted.sort((a, b) => a.basePrice - b.basePrice);
+    
+    case 'price-high-low':
+      return sorted.sort((a, b) => b.basePrice - a.basePrice);
+    
+    case 'newest':
+      return sorted.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      });
+    
+    case 'best-rated':
+      return sorted.sort((a, b) => {
+        if (b.rating === a.rating) {
+          return b.reviewCount - a.reviewCount;
+        }
+        return b.rating - a.rating;
+      });
+    
+    case 'most-popular':
+      return sorted.sort((a, b) => {
+        const popularityA = (a.popularity || 0) + (a.reviewCount * 0.5);
+        const popularityB = (b.popularity || 0) + (b.reviewCount * 0.5);
+        return popularityB - popularityA;
+      });
+    
+    case 'featured':
+    default:
+      return sorted;
+  }
+};
