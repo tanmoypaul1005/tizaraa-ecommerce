@@ -15,6 +15,8 @@ export interface Product {
   images: ProductImage[];
   variants: ProductVariants;
   specifications: Specification[];
+  createdAt?: string;
+  popularity?: number;
 }
 
 export interface ProductImage {
