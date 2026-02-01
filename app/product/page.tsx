@@ -90,10 +90,10 @@ const ProductsPage = () => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                 >
                   {categories.map((cat) => (
-                    <option key={cat} value={cat}>
+                    <option key={cat} value={cat} className="text-black">
                       {cat === 'all' ? 'All Categories' : cat}
                     </option>
                   ))}
@@ -108,12 +108,12 @@ const ProductsPage = () => {
                 <select
                   value={priceRange}
                   onChange={(e) => setPriceRange(e.target.value as any)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                 >
-                  <option value="all">All Prices</option>
-                  <option value="under50">Under $50</option>
-                  <option value="50-100">$50 - $100</option>
-                  <option value="over100">Over $100</option>
+                  <option value="all" className="text-black">All Prices</option>
+                  <option value="under50" className="text-black">Under $50</option>
+                  <option value="50-100" className="text-black">$50 - $100</option>
+                  <option value="over100" className="text-black">Over $100</option>
                 </select>
               </div>
             </div>
