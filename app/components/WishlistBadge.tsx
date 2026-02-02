@@ -18,10 +18,10 @@ export const WishlistBadge = () => {
         className="relative p-2 text-gray-700 hover:text-red-600 transition-colors"
         aria-label="Wishlist"
       >
-        <Heart className="w-6 h-6" fill={items.length > 0 ? 'currentColor' : 'none'} />
-        {items.length > 0 && (
+        <Heart className="w-6 h-6" fill={'none'} />
+        {items?.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-            {items.length}
+            {items?.length}
           </span>
         )}
       </button>
@@ -38,11 +38,11 @@ export const WishlistBadge = () => {
             <div className="p-4 border-b border-gray-100">
               <h3 className="font-bold text-gray-900 text-lg flex items-center gap-2">
                 <Heart className="w-5 h-5 text-red-600" />
-                My Wishlist ({items.length})
+                My Wishlist ({items?.length})
               </h3>
             </div>
             
-            {items.length === 0 ? (
+            {items?.length === 0 ? (
               <div className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-3 text-gray-300" />
                 <p className="text-gray-500 mb-2">Your wishlist is empty</p>
@@ -50,10 +50,10 @@ export const WishlistBadge = () => {
               </div>
             ) : (
               <div className="max-h-96 overflow-y-auto">
-                {items.map((item) => (
+                {items?.map((item) => (
                   <Link
                     key={item.productId}
-                    href={`/product/${item.productId}`}
+                    href={`/product/${item?.productId}`}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                   >
@@ -74,7 +74,7 @@ export const WishlistBadge = () => {
                         {item.name}
                       </h4>
                       <p className="text-sm text-gray-900 font-bold mt-1">
-                        ${item.price.toFixed(2)}
+                        ${item?.price?.toFixed(2)}
                       </p>
                     </div>
                   </Link>
