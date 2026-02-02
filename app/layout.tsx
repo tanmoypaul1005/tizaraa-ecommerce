@@ -7,6 +7,7 @@ import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import OnlineStatus from "./components/OnlineStatus";
 import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import UpdateNotification from "./components/UpdateNotification";
+import CrossTabSyncIndicator from "./components/CrossTabSyncIndicator";
 import { CartDrawer } from "./components/CartDrawer";
 
 const geistSans = Geist({
@@ -75,6 +76,7 @@ export default function RootLayout({
         <ServiceWorkerRegister />
         <OnlineStatus />
         <UpdateNotification />
+        <CrossTabSyncIndicator />
         <Navbar/>
         {children}
         <Footer />

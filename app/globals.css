@@ -96,6 +96,41 @@ body {
   animation: scale-in 0.2s ease-out;
 }
 
+/* Cross-tab sync animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-fade-out {
+  animation: fade-out 3s ease-in-out forwards;
+}
+
 /* Install prompt hidden on installed PWA */
 @media (display-mode: standalone) {
   .pwa-install-prompt {
