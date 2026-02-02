@@ -50,7 +50,7 @@ export default function Home() {
               <span>Premium Customizable Products</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
               Design Your Perfect
               <span className="block bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-transparent">
                 Custom Product
@@ -90,10 +90,10 @@ export default function Home() {
       </section>
 
       {/* Products Section */}
-      <section id="products" className="bg-gradient-to-b from-white to-gray-50">
+      <section id="products" className="py-2 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 space-y-4">
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               Featured Products
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -109,7 +109,7 @@ export default function Home() {
 
 
      {/* Features Section */}
-      <section className="py-8 bg-white">
+      <section className=" bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="text-center space-y-3">
