@@ -49,14 +49,16 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div ref={dropdownRef} className="relative">
+    <div ref={dropdownRef} className="relative w-full sm:w-auto">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 rounded-xl hover:border-gray-400 hover:bg-gray-50 transition-all font-medium text-gray-700"
+        className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-2 px-3 sm:px-4 py-2.5 bg-white border-2 border-gray-300 rounded-lg sm:rounded-xl hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 transition-all font-medium text-sm sm:text-base text-gray-700"
       >
-        <ArrowUpDown className="w-4 h-4" />
-        <span className="hidden sm:inline">Sort:</span>
-        <span>{selectedOption?.label}</span>
+        <div className="flex items-center gap-2">
+          <ArrowUpDown className="w-4 h-4" />
+          <span className="hidden sm:inline">Sort:</span>
+          <span className="truncate">{selectedOption?.label}</span>
+        </div>
       </button>
 
       {isOpen && (
