@@ -47,7 +47,6 @@ export interface Specification {
 }
 
 export const MOCK_PRODUCTS: Product[] = [
-
   {
     id: '02',
     name: 'Designer Custom Hoodie',
@@ -496,47 +495,6 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
   },
   {
-    id: '12',
-    name: 'Minimalist Desk Organizer',
-    slug: 'desk-organizer',
-    shortDescription: 'Premium wooden desk organizer with modern design.',
-    description: 'Keep your workspace tidy with our minimalist desk organizer. Crafted from sustainable bamboo with multiple compartments for pens, phone, tablet, and accessories. Sleek design complements any office aesthetic.',
-    basePrice: 44.99,
-    compareAtPrice: 64.99,
-    rating: 4.7,
-    reviewCount: 489,
-    category: 'Office & Stationery',
-    tags: ['organizer', 'desk', 'bamboo', 'minimalist'],
-    inStock: true,
-    stockQuantity: 203,
-    images: [
-      { id: '1', url: 'https://images.unsplash.com/photo-1587059283389-96a5081e82b6?w=800&h=800&fit=crop', alt: 'Desk organizer', type: 'image' },
-      { id: '2', url: 'https://images.unsplash.com/photo-1611269154421-4e27233ac5c7?w=800&h=800&fit=crop', alt: 'Organizer with items', type: 'image' },
-      { id: '3', url: 'https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&h=800&fit=crop', alt: 'Organizer detail', type: 'image' },
-    ],
-    variants: {
-      colors: [
-        { id: 'natural', name: 'Natural Bamboo', value: 'natural', hex: '#D2691E', available: true },
-        { id: 'walnut', name: 'Dark Walnut', value: 'walnut', hex: '#5D4037', available: true },
-        { id: 'white', name: 'White Oak', value: 'white', hex: '#F5F5F5', available: true },
-      ],
-      materials: [
-        { id: 'bamboo', name: 'Bamboo', value: 'bamboo', available: true, priceModifier: 0 },
-        { id: 'wood', name: 'Hardwood', value: 'wood', available: true, priceModifier: 15 },
-      ],
-      sizes: [
-        { id: 'standard', name: 'Standard', value: 'Standard', available: true, priceModifier: 0 },
-        { id: 'large', name: 'Large', value: 'Large', available: true, priceModifier: 20 },
-      ],
-    },
-    specifications: [
-      { label: 'Material', value: 'Sustainable Bamboo' },
-      { label: 'Dimensions', value: '12" x 8" x 4"' },
-      { label: 'Compartments', value: 'Multiple Sections' },
-      { label: 'Finish', value: 'Natural Lacquer' },
-    ],
-  },
-  {
     id: '13',
     name: 'Insulated Travel Tumbler',
     slug: 'travel-tumbler',
@@ -621,48 +579,6 @@ export const MOCK_PRODUCTS: Product[] = [
       { label: 'Base', value: 'Anti-Slip Rubber' },
       { label: 'Edge', value: 'Stitched' },
       { label: 'Thickness', value: '3mm' },
-    ],
-  },
-  {
-    id: '15',
-    name: 'Scented Candle Gift Set',
-    slug: 'scented-candle-set',
-    shortDescription: 'Luxury soy candle set with essential oils and natural fragrances.',
-    description: 'Create the perfect ambiance with our luxury scented candle gift set. Made from 100% natural soy wax with essential oils. Long-lasting burn time, clean burning, and comes in elegant glass jars. Set of 3 candles.',
-    basePrice: 54.99,
-    compareAtPrice: 74.99,
-    rating: 4.8,
-    reviewCount: 623,
-    category: 'Home Decor',
-    tags: ['candles', 'gift', 'luxury', 'aromatherapy'],
-    inStock: true,
-    stockQuantity: 178,
-    images: [
-      { id: '1', url: 'https://images.unsplash.com/photo-1602874801006-39554c2bfaa8?w=800&h=800&fit=crop', alt: 'Candle set', type: 'image' },
-      { id: '2', url: 'https://images.unsplash.com/photo-1598536001007-22d78877b5b2?w=800&h=800&fit=crop', alt: 'Candle burning', type: 'image' },
-      { id: '3', url: 'https://images.unsplash.com/photo-1615718181927-dff0afce6f3e?w=800&h=800&fit=crop', alt: 'Candle close-up', type: 'image' },
-    ],
-    variants: {
-      colors: [
-        { id: 'lavender', name: 'Lavender Dreams', value: 'lavender', hex: '#9333EA', available: true },
-        { id: 'vanilla', name: 'Vanilla Bean', value: 'vanilla', hex: '#FEF3C7', available: true },
-        { id: 'ocean', name: 'Ocean Breeze', value: 'ocean', hex: '#06B6D4', available: true },
-        { id: 'sandalwood', name: 'Sandalwood', value: 'sandalwood', hex: '#92400E', available: true },
-      ],
-      materials: [
-        { id: 'soy', name: 'Soy Wax', value: 'soy', available: true, priceModifier: 0 },
-        { id: 'beeswax', name: 'Beeswax Blend', value: 'beeswax', available: true, priceModifier: 12 },
-      ],
-      sizes: [
-        { id: '3pack', name: 'Set of 3', value: '3 Candles', available: true, priceModifier: 0 },
-        { id: '6pack', name: 'Set of 6', value: '6 Candles', available: true, priceModifier: 35 },
-      ],
-    },
-    specifications: [
-      { label: 'Material', value: '100% Natural Soy Wax' },
-      { label: 'Burn Time', value: '40-50 hours per candle' },
-      { label: 'Size', value: '8 oz per jar' },
-      { label: 'Packaging', value: 'Gift Ready' },
     ],
   },
 ];
