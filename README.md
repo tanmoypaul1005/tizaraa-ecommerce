@@ -14,11 +14,13 @@ A modern, feature-rich e-commerce platform built with Next.js 16, featuring PWA 
 ### 2. Smart Cart Features
 - ✅ **Save for Later** - Move items between cart and saved list
 - ✅ **Recently Viewed Products** - Track last 10 viewed products automatically
-- ✅ **Bundle Discount Detection**
-  - 15% off for 3+ items
-  - 20% off for 5+ items
+- ✅ **Quantity Discount System** - Automatic tiered discounts:
+  - 5% off for 3-4 items
+  - 10% off for 5-9 items
+  - 15% off for 10+ items
+- ✅ **Visual Progress Indicators** - Real-time tier tracking and next tier preview
 - ✅ **Low Stock Warnings** - Alert when items have ≤5 units remaining
-- ✅ **Promo Code System** - Apply discount codes with validation
+- ✅ **Promo Code System** - Apply discount codes with validation (stackable with quantity discounts)
 
 ### 3. Cart Operations
 - ✅ **Add to Cart** - Add products with variant selections (color, material, size)
@@ -246,11 +248,51 @@ npm start
 - Cross-tab sync requires modern browsers
 - PWA features require HTTPS in production
 - Promo codes are case-insensitive
-- Bundle discounts stack with promo codes
+- Quantity discounts apply automatically based on item count
+- Quantity discounts stack with promo codes for maximum savings
 - Free shipping threshold: $50
 - Tax rate: 8%
 - Recently viewed limited to 10 items
 - Low stock warning at ≤5 units
+
+## 💰 Quantity Discount System
+
+The platform features an automatic **tiered discount system** that rewards customers for adding more items:
+
+### Discount Tiers
+- **3-4 items**: 5% off entire order
+- **5-9 items**: 10% off entire order  
+- **10+ items**: 15% off entire order
+
+### Key Features
+- 🎯 **Automatic Application** - No codes needed, discounts apply instantly
+- 📊 **Visual Progress** - See your current tier and progress to next level
+- 💵 **Real Savings Display** - Shows exact dollar amount saved
+- 🔄 **Real-Time Updates** - Discount adjusts as you add/remove items
+- 🎁 **Stackable** - Combine with promo codes for bigger savings
+
+### Example Savings
+```
+Cart: 5 items, Subtotal: $200
+├─ Quantity Discount (10%): -$20.00
+├─ Promo Code "SAVE20" (20%): -$36.00
+├─ Tax (8%): +$11.52
+└─ Total: $155.52 → You save $64.48! 💰
+```
+
+For complete details, see [QUANTITY_DISCOUNTS.md](./QUANTITY_DISCOUNTS.md)
+
+## 🔧 Server Actions
+
+The platform implements Next.js Server Actions for cart and wishlist operations:
+
+- **Cart Operations**: Add, update, remove items with server-side persistence
+- **Wishlist Management**: Server-side wishlist storage and sync
+- **Hybrid Architecture**: Automatic fallback to IndexedDB when offline
+- **Cookie Storage**: HTTP-only cookies for secure cart persistence
+- **Real-Time Sync**: Syncs with server when connection is available
+
+For technical details, see [SERVER_ACTIONS.md](./SERVER_ACTIONS.md)
 
 ## 🎯 Future Enhancements
 

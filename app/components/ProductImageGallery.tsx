@@ -17,11 +17,13 @@ interface ProductImageGalleryProps {
 }
 
 const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => {
+  
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
+  const [isOverControls, setIsOverControls] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -32,11 +34,22 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
   };
 
   const handleMouseEnter = () => {
-    setIsHovering(true);
+    if (!isOverControls) {
+      setIsHovering(true);
+    }
   };
 
   const handleMouseLeave = () => {
     setIsHovering(false);
+  };
+
+  const handleControlsEnter = () => {
+    setIsOverControls(true);
+    setIsHovering(false);
+  };
+
+  const handleControlsLeave = () => {
+    setIsOverControls(false);
   };
 
   const handlePrevious = () => {
@@ -82,8 +95,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
             className="max-w-full max-h-full object-contain transition-all duration-200"
             style={{ 
-              transform: `scale(${isHovering ? 2 : zoom}) rotate(${rotation}deg)`,
-              transformOrigin: isHovering ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
+              transform: `scale(${isHovering && !isOverControls ? 2 : zoom}) rotate(${rotation}deg)`,
+              transformOrigin: isHovering && !isOverControls ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
             }}
             priority={selectedIndex === 0}
             placeholder="blur"
@@ -101,7 +114,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
         )}
 
         {/* Navigation Arrows */}
-        {images.length > 1 && (
+        {images?.length > 1 && (
           <>
             <button
               onClick={handlePrevious}
@@ -119,7 +132,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
         )}
 
         {/* Control Buttons */}
-        <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div 
+          className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+          onMouseEnter={handleControlsEnter}
+          onMouseLeave={handleControlsLeave}
+        >
           <button
             onClick={handleZoom}
             className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
@@ -145,15 +162,15 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
 
         {/* Image Counter */}
         <div className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-          {selectedIndex + 1} / {images.length}
+          {selectedIndex + 1} / {images?.length}
         </div>
       </div>
 
       {/* Thumbnail Gallery */}
       <div className="grid grid-cols-5 gap-3">
-        {images.map((image, index) => (
+        {images?.map((image, index) => (
           <button
-            key={image.id}
+            key={image?.id}
             onClick={() => setSelectedIndex(index)}
             className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
               selectedIndex === index
@@ -162,8 +179,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
             }`}
           >
             <Image
-              src={image.url}
-              alt={image.alt}
+              src={image?.url}
+              alt={image?.alt}
               fill
               sizes="(max-width: 768px) 20vw, 10vw"
               className="object-cover"
@@ -171,7 +188,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
               blurDataURL={shimmerBlurDataUrl}
               quality={60}
             />
-            {image.type === 'video' && (
+            {image?.type === 'video' && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
                   <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-gray-800 border-b-[6px] border-b-transparent ml-1"></div>

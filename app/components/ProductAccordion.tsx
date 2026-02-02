@@ -105,38 +105,38 @@ const ProductAccordion: React.FC<ProductAccordionProps> = ({ items }) => {
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev?.filter((item) => item !== id) : [...prev, id]
     );
   };
 
   return (
     <div className="border-t border-gray-200 divide-y divide-gray-200">
-      {accordionItems.map((item) => (
-        <div key={item.id} className="py-4">
+      {accordionItems?.map((item) => (
+        <div key={item?.id} className="py-4">
           <button
-            onClick={() => toggleItem(item.id)}
+            onClick={() => toggleItem(item?.id)}
             className="w-full flex items-center justify-between text-left group"
           >
             <div className="flex items-center gap-3">
               {item.icon && (
                 <span className="text-gray-700 group-hover:text-blue-600 transition-colors">
-                  {item.icon}
+                  {item?.icon}
                 </span>
               )}
               <span className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                {item.title}
+                {item?.title}
               </span>
             </div>
             <ChevronDown
               className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
-                openItems.includes(item.id) ? 'rotate-180' : ''
+                openItems.includes(item?.id) ? 'rotate-180' : ''
               }`}
             />
           </button>
 
           <div
             className={`overflow-hidden transition-all duration-200 ${
-              openItems.includes(item.id) ? 'max-h-96 mt-4' : 'max-h-0'
+              openItems.includes(item?.id) ? 'max-h-96 mt-4' : 'max-h-0'
             }`}
           >
             {item.content}
