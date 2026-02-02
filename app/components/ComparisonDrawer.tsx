@@ -99,7 +99,10 @@ export default function ComparisonDrawer() {
                               <Image
                                 src={product.images[0].url}
                                 alt={product.name}
-                                fill
+                                // fill
+                                style={{ width: '400px', height: '400px', objectFit: 'cover' }}
+                                width={400}
+                                height={400}
                                 className="object-cover"
                               />
                             </div>
