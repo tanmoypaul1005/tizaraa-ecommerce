@@ -60,12 +60,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div 
+    <Link href={`/product/${id}`}
       className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
       onMouseEnter={handleMouseEnter}
     >
       {/* Image Section */}
-      <Link href={`/product/${id}`} className="block relative aspect-square overflow-hidden bg-gray-50">
+      <div  className="block relative aspect-square overflow-hidden bg-gray-50">
         <Image
           src={image}
           alt={name}
@@ -125,7 +125,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <span className="text-sm">Quick View</span>
           </Link>
         </div>
-      </Link>
+      </div>
 
       {/* Content Section */}
       <div className="p-4 space-y-3">
@@ -176,7 +176,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

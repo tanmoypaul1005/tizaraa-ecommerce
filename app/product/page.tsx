@@ -144,9 +144,6 @@ const ProductsPage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-4 py-8">
-                {/* Header */}
-               
-
                 <div className="flex gap-6">
                     {/* Sidebar Filters */}
                     <aside className={`${showFilters ? 'block' : 'hidden'} lg:block w-full lg:w-72 flex-shrink-0`}>
@@ -370,8 +367,8 @@ const ProductsPage = () => {
 
                         {/* Products Grid */}
                         {sortedProducts?.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {sortedProducts.map((product) => (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                                {sortedProducts?.map((product) => (
                                     <ProductCard
                                         key={product?.id}
                                         id={product?.id}
