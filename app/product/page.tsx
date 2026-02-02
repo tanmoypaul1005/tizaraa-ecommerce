@@ -314,7 +314,7 @@ const ProductsPage = () => {
                                 {/* Color Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Colors</h4>
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 h-48 overflow-y-auto">
                                         {filterOptions.colors.map((color) => (
                                             <label
                                                 key={color}
