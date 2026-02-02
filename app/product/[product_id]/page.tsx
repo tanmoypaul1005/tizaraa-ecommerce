@@ -102,7 +102,7 @@ export default function ProductDetailsPage() {
         if (firstAvailableSize) setSelectedSize(firstAvailableSize.id);
       }
 
-      setCurrentPrice(product.basePrice);
+      // setCurrentPrice(product.basePrice);
       setStockQuantity(product.stockQuantity);
       setStockStatus(
         product.stockQuantity > 50 ? 'in-stock' :
