@@ -201,7 +201,7 @@ const ProductsPage = () => {
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Category</h4>
                                     <div className="space-y-2">
-                                        {categories.map((cat) => (
+                                        {categories?.map((cat) => (
                                             <label
                                                 key={cat}
                                                 className="flex items-center justify-between cursor-pointer group"
@@ -424,7 +424,7 @@ const ProductsPage = () => {
 
                         {/* Products Grid */}
                         {sortedProducts?.length > 0 ? (
-                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                            <div className="grid px-5 md:px-0 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                                 {sortedProducts?.map((product) => (
                                     <ProductCard
                                         key={product?.id}
