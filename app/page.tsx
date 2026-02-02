@@ -11,7 +11,7 @@ import CTASection from "./components/home/CTASection";
 async function FeaturedProductsGrid() {
   // Simulate async data fetching
   await new Promise(resolve => setTimeout(resolve, 100));
-  const featuredProducts = getFeaturedProducts(6);
+  const featuredProducts = getFeaturedProducts(15);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 lg:px-36">
