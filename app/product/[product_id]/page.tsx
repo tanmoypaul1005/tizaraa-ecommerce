@@ -233,9 +233,9 @@ export default function ProductDetailsPage() {
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-3">
-                <span className="text-4xl font-bold text-gray-900">${currentPrice.toFixed(2)}</span>
-                {product.compareAtPrice && currentPrice !== product.compareAtPrice && (
-                  <span className="text-xl text-gray-400 line-through">${product.compareAtPrice.toFixed(2)}</span>
+                <span className="text-4xl font-bold text-gray-900">${currentPrice?.toFixed(2)}</span>
+                {product?.compareAtPrice && currentPrice !== product?.compareAtPrice && (
+                  <span className="text-xl text-gray-400 line-through">${product?.compareAtPrice?.toFixed(2)}</span>
                 )}
               </div>
               <p className="text-sm text-gray-500">Tax included. Shipping calculated at checkout.</p>
@@ -256,11 +256,11 @@ export default function ProductDetailsPage() {
             <div className="border-t border-gray-200"></div>
 
             <div className="space-y-6">
-              {product.variants.colors.length > 0 && (
+              {product?.variants?.colors?.length > 0 && (
                 <VariantSelector
                   label="Color"
                   type="color"
-                  options={product.variants.colors}
+                  options={product?.variants?.colors}
                   selected={selectedColor}
                   onSelect={setSelectedColor}
                 />
@@ -270,13 +270,13 @@ export default function ProductDetailsPage() {
                 <VariantSelector
                   label="Material"
                   type="material"
-                  options={product.variants.materials}
+                  options={product?.variants?.materials}
                   selected={selectedMaterial}
                   onSelect={setSelectedMaterial}
                 />
               )}
 
-              {product.variants.sizes.length > 0 && (
+              {product?.variants?.sizes?.length > 0 && (
                 <VariantSelector
                   label="Size"
                   type="size"
