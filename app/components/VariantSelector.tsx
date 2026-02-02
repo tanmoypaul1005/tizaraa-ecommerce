@@ -28,19 +28,19 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
 }) => {
   const renderColorOption = (option: Variant) => (
     <button
-      key={option.id}
+      key={option?.id}
       onClick={() => option?.available && onSelect(option?.id)}
       disabled={!option?.available}
       className={`relative w-12 h-12 rounded-full border-2 transition-all ${
         selected === option?.id
           ? 'border-blue-600 ring-2 ring-blue-200 scale-110'
           : 'border-gray-300 hover:border-gray-400'
-      } ${!option.available ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
-      title={option.name}
+      } ${!option?.available ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
+      title={option?.name}
     >
       <div
         className="w-full h-full rounded-full"
-        style={{ backgroundColor: option.hex || option.value }}
+        style={{ backgroundColor: option?.hex || option?.value }}
       >
         {selected === option?.id && (
           <div className="absolute inset-0 flex items-center justify-center">
