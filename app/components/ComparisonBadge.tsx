@@ -13,7 +13,7 @@ const ComparisonBadge: React.FC = () => {
   return (
     <button
       onClick={openComparison}
-      className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors group"
+      className="relative p-2 cursor-pointer hover:bg-gray-100 rounded-lg transition-colors group"
       aria-label={`Compare ${count} products`}
     >
       <ArrowLeftRight className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors" />
