@@ -81,11 +81,11 @@ export const MOCK_PRODUCTS: Product[] = [
         { id: 'performance', name: 'Performance Tech', value: 'performance', available: false, priceModifier: 25 },
       ],
       sizes: [
-        { id: 'xs', name: 'Extra Small', value: 'XS', available: true },
-        { id: 's', name: 'Small', value: 'S', available: true },
-        { id: 'm', name: 'Medium', value: 'M', available: true },
-        { id: 'l', name: 'Large', value: 'L', available: true },
-        { id: 'xl', name: 'Extra Large', value: 'XL', available: false },
+        { id: 'xs', name: 'Extra Small', value: 'XS', available: true, priceModifier: 0 },
+        { id: 's', name: 'Small', value: 'S', available: true, priceModifier: 10  },
+        { id: 'm', name: 'Medium', value: 'M', available: true, priceModifier: 12  },
+        { id: 'l', name: 'Large', value: 'L', available: true, priceModifier: 14  },
+        { id: 'xl', name: 'Extra Large', value: 'XL', available: false, priceModifier: 18  },
       ],
     },
     specifications: [
