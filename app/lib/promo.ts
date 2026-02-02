@@ -39,39 +39,52 @@ export const validatePromoCode = (
   code: string,
   subtotal: number
 ): { valid: boolean; discount: number; message: string; promoCode?: PromoCode } => {
+  // TESTING MODE: Accept all promo codes
   const promo = promoCodes[code.toUpperCase()];
 
-  if (!promo) {
-    return { valid: false, discount: 0, message: 'Invalid promo code' };
-  }
+  // If code exists in our database, use it
+  if (promo) {
+    // if (promo.expiresAt && new Date() > promo.expiresAt) {
+    //   return { valid: false, discount: 0, message: 'Promo code has expired' };
+    // }
 
-  if (promo.expiresAt && new Date() > promo.expiresAt) {
-    return { valid: false, discount: 0, message: 'Promo code has expired' };
-  }
+    // if (promo.minPurchase && subtotal < promo.minPurchase) {
+    //   return {
+    //     valid: false,
+    //     discount: 0,
+    //     message: `Minimum purchase of $${promo.minPurchase} required`,
+    //   };
+    // }
 
-  if (promo.minPurchase && subtotal < promo.minPurchase) {
+    // let discount = 0;
+    // if (promo.type === 'percentage') {
+    //   discount = (subtotal * promo.value) / 100;
+    //   if (promo.maxDiscount && discount > promo.maxDiscount) {
+    //     discount = promo.maxDiscount;
+    //   }
+    // } else {
+    //   discount = promo.value;
+    // }
+
     return {
-      valid: false,
-      discount: 0,
-      message: `Minimum purchase of $${promo.minPurchase} required`,
+      valid: true,
+      discount: promo.type === 'percentage' ? (subtotal * promo.value) / 100 : promo.value,
+      message: `${promo.type === 'percentage' ? promo.value + '%' : '$' + promo.value} discount applied!`,
+      promoCode: promo,
     };
   }
 
-  let discount = 0;
-  if (promo.type === 'percentage') {
-    discount = (subtotal * promo.value) / 100;
-    if (promo.maxDiscount && discount > promo.maxDiscount) {
-      discount = promo.maxDiscount;
-    }
-  } else {
-    discount = promo.value;
-  }
-
+  // TESTING MODE: Accept any unknown code with 10% discount
+  const testDiscount = (subtotal * 10) / 100;
   return {
     valid: true,
-    discount,
-    message: `${promo.type === 'percentage' ? promo.value + '%' : '$' + promo.value} discount applied!`,
-    promoCode: promo,
+    discount: testDiscount,
+    message: `✓ Test code accepted - 10% discount applied!`,
+    promoCode: {
+      code: code.toUpperCase(),
+      type: 'percentage',
+      value: 10,
+    },
   };
 };
 
