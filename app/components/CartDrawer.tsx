@@ -146,7 +146,7 @@ export const CartDrawer: React.FC = () => {
               {/* Cart Items */}
               <div>
                 {items?.map((item) => (
-                  <CartItemComponent key={item.id} item={item} />
+                  <CartItemComponent key={item?.id} item={item} />
                 ))}
               </div>
 
@@ -154,11 +154,11 @@ export const CartDrawer: React.FC = () => {
               {savedItems?.length > 0 && (
                 <div className="mt-4 p-4 bg-gray-50">
                   <h3 className="text-sm font-semibold text-gray-900 mb-3">
-                    Saved for Later ({savedItems.length})
+                    Saved for Later ({savedItems?.length})
                   </h3>
                   <div className="space-y-2">
                     {savedItems.map((item) => (
-                      <SavedItemComponent key={item.id} item={item} />
+                      <SavedItemComponent key={item?.id} item={item} />
                     ))}
                   </div>
                 </div>

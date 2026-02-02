@@ -165,33 +165,22 @@ export default function ProductDetailsPage() {
     setIsAddingToCart(true);
 
     try {
-      console.log('Adding to cart:', {
-        productId: product.id,
-        name: product.name,
-        price: currentPrice,
-        quantity,
-        selectedColor: product.variants.colors.find(c => c.id === selectedColor)?.name,
-        selectedMaterial: product.variants.materials.find(m => m.id === selectedMaterial)?.name,
-        selectedSize,
-      });
 
       await addItem({
-        productId: product.id,
-        name: product.name,
-        image: product.images[0].url,
+        productId: product?.id,
+        name: product?.name,
+        image: product?.images[0]?.url,
         price: currentPrice,
         quantity,
-        selectedColor: product.variants.colors.find(c => c.id === selectedColor)?.name,
-        selectedMaterial: product.variants.materials.find(m => m.id === selectedMaterial)?.name,
+        selectedColor: product?.variants?.colors?.find(c => c.id === selectedColor)?.name,
+        selectedMaterial: product?.variants?.materials?.find(m => m.id === selectedMaterial)?.name,
         selectedSize,
         maxQuantity: stockQuantity,
       });
 
-      console.log('Item added successfully');
       // Open cart drawer to show the added item
       openCart();
     } catch (error) {
-      console.error('Failed to add to cart:', error);
       alert(`Failed to add item to cart: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsAddingToCart(false);
@@ -203,13 +192,12 @@ export default function ProductDetailsPage() {
 
     try {
       await toggleWishlist({
-        productId: product.id,
-        name: product.name,
-        image: product.images[0].url,
+        productId: product?.id,
+        name: product?.name,
+        image: product?.images[0]?.url,
         price: currentPrice,
       });
     } catch (error) {
-      console.error('Failed to toggle wishlist:', error);
       alert(`Failed to update wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
@@ -221,10 +209,10 @@ export default function ProductDetailsPage() {
   };
 
   const customizationOptions = [
-    { label: 'Color', value: product.variants.colors.find(c => c.id === selectedColor)?.name || '' },
-    { label: 'Material', value: product.variants.materials.find(m => m.id === selectedMaterial)?.name || '' },
-    { label: 'Size', value: selectedSize.toUpperCase() },
-    { label: 'Quantity', value: quantity.toString() },
+    { label: 'Color', value: product?.variants?.colors.find(c => c?.id === selectedColor)?.name || '' },
+    { label: 'Material', value: product?.variants?.materials?.find(m => m?.id === selectedMaterial)?.name || '' },
+    { label: 'Size', value: selectedSize?.toUpperCase() },
+    { label: 'Quantity', value: quantity?.toString() },
   ];
 
   return (
