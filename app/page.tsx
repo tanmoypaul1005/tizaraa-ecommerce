@@ -90,10 +90,10 @@ export default function Home() {
       </section>
 
       {/* Products Section */}
-      <section id="products" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
+      <section id="products" className="bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 space-y-4">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               Featured Products
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
