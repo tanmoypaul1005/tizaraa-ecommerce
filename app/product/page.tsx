@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import ProductCard from '@/app/components/ProductCard';
 import SortDropdown, { SortOption } from '@/app/components/SortDropdown';
 import { MOCK_PRODUCTS, sortProducts } from '@/app/data/products';
-import { Filter, X, Star } from 'lucide-react';
+import { Filter, Star } from 'lucide-react';
 
 const ProductsPage = () => {
     const [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -94,14 +94,14 @@ const ProductsPage = () => {
         // Filter by colors
         if (selectedColors.length > 0) {
             filtered = filtered.filter(p =>
-                p.variants.colors.some(c => selectedColors.includes(c.name))
+                p?.variants?.colors.some(c => selectedColors.includes(c.name))
             );
         }
 
         // Filter by sizes
         if (selectedSizes.length > 0) {
-            filtered = filtered.filter(p =>
-                p.variants.sizes.some(s => selectedSizes.includes(s.value))
+            filtered = filtered?.filter(p =>
+                p?.variants?.sizes?.some(s => selectedSizes.includes(s.value))
             );
         }
 
@@ -347,7 +347,7 @@ const ProductsPage = () => {
                             <div className="">
                                 <h1 className="text-4xl font-bold text-gray-900 mb-2">All Products</h1>
                                 <p className="text-gray-600">
-                                    Showing {sortedProducts.length} of {MOCK_PRODUCTS.length} products
+                                    Showing {sortedProducts?.length} of {MOCK_PRODUCTS.length} products
                                 </p>
                             </div>
 
@@ -369,22 +369,23 @@ const ProductsPage = () => {
                         </div>
 
                         {/* Products Grid */}
-                        {sortedProducts.length > 0 ? (
+                        {sortedProducts?.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {sortedProducts.map((product) => (
                                     <ProductCard
-                                        key={product.id}
-                                        id={product.id}
-                                        name={product.name}
-                                        shortDescription={product.shortDescription}
-                                        basePrice={product.basePrice}
-                                        compareAtPrice={product.compareAtPrice}
-                                        rating={product.rating}
-                                        reviewCount={product.reviewCount}
-                                        image={product.images[0].url}
-                                        category={product.category}
-                                        tags={product.tags}
-                                        inStock={product.inStock}
+                                        key={product?.id}
+                                        id={product?.id}
+                                        name={product?.name}
+                                        shortDescription={product?.shortDescription}
+                                        basePrice={product?.basePrice}
+                                        compareAtPrice={product?.compareAtPrice}
+                                        rating={product?.rating}
+                                        reviewCount={product?.reviewCount}
+                                        image={product?.images[0]?.url}
+                                        category={product?.category}
+                                        tags={product?.tags}
+                                        inStock={product?.inStock}
+                                        fullProduct={product}
                                     />
                                 ))}
                             </div>

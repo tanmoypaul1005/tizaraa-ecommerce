@@ -128,7 +128,7 @@ export const CartDrawer: React.FC = () => {
 
         {/* Items List */}
         <div className="flex-1 overflow-y-auto">
-          {items.length === 0 ? (
+          {items?.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full p-8 text-center">
               <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Your cart is empty</h3>

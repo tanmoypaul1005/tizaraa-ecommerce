@@ -47,11 +47,11 @@ export default function ProductDetailsPage() {
       params.set('color', selectedColor);
       params.set('material', selectedMaterial);
       params.set('size', selectedSize);
-      
+
       // Update URL without reload
       const newUrl = `${window.location.pathname}?${params.toString()}`;
       window.history.replaceState({}, '', newUrl);
-      
+
       // Set shareable URL
       const shareUrl = `${window.location.origin}${newUrl}`;
       setProductUrl(shareUrl);
@@ -106,7 +106,7 @@ export default function ProductDetailsPage() {
       setStockQuantity(product.stockQuantity);
       setStockStatus(
         product.stockQuantity > 50 ? 'in-stock' :
-        product.stockQuantity > 0 ? 'low-stock' : 'out-of-stock'
+          product.stockQuantity > 0 ? 'low-stock' : 'out-of-stock'
       );
     }
   }, [product, searchParams]);
@@ -161,9 +161,9 @@ export default function ProductDetailsPage() {
 
   const handleAddToCart = async () => {
     if (!isAvailable || !product) return;
-    
+
     setIsAddingToCart(true);
-    
+
     try {
       console.log('Adding to cart:', {
         productId: product.id,
@@ -186,7 +186,7 @@ export default function ProductDetailsPage() {
         selectedSize,
         maxQuantity: stockQuantity,
       });
-      
+
       console.log('Item added successfully');
       // Open cart drawer to show the added item
       openCart();
@@ -200,7 +200,7 @@ export default function ProductDetailsPage() {
 
   const handleToggleWishlist = async () => {
     if (!product) return;
-    
+
     try {
       await toggleWishlist({
         productId: product.id,
@@ -321,11 +321,13 @@ export default function ProductDetailsPage() {
             <ProductAccordion />
           </div>
         </div>
+
+        {/* Recently Viewed Products */}
+        <RecentlyViewed />
       </div>
 
-      <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 lg:hidden transition-transform duration-300 z-40 ${
-        isSticky ? 'translate-y-0' : 'translate-y-full'
-      }`}>
+      <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 lg:hidden transition-transform duration-300 z-40 ${isSticky ? 'translate-y-0' : 'translate-y-full'
+        }`}>
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">Total Price</p>
@@ -334,19 +336,15 @@ export default function ProductDetailsPage() {
           <button
             onClick={handleAddToCart}
             disabled={!isAvailable}
-            className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${
-              isAvailable
+            className={`flex-1 py-3 px-6 rounded-xl font-semibold transition-all ${isAvailable
                 ? 'bg-blue-600 text-white active:scale-95'
                 : 'bg-gray-200 text-gray-400'
-            }`}
+              }`}
           >
             Add to Cart
           </button>
         </div>
       </div>
-
-      {/* Recently Viewed Products */}
-      <RecentlyViewed />
     </div>
   );
 }
