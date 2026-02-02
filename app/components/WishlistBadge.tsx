@@ -15,7 +15,7 @@ export const WishlistBadge = () => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-700 hover:text-red-600 transition-colors"
+        className="relative cursor-pointer p-2 text-gray-700 hover:text-red-600 transition-colors"
         aria-label="Wishlist"
       >
         <Heart className="w-6 h-6" fill={'none'} />

@@ -11,7 +11,7 @@ export const CartBadge: React.FC = () => {
   return (
     <button
       onClick={openCart}
-      className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
+      className="relative cursor-pointer p-2 rounded-full hover:bg-gray-100 transition-colors"
       aria-label={`Shopping cart with ${itemCount} items`}
     >
       <ShoppingCart className="w-6 h-6 text-gray-700" />
