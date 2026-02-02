@@ -50,7 +50,7 @@ export default function Home() {
               <span>Premium Customizable Products</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
               Design Your Perfect
               <span className="block bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-transparent">
                 Custom Product
