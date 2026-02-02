@@ -8,6 +8,7 @@ import OnlineStatus from "./components/OnlineStatus";
 import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import UpdateNotification from "./components/UpdateNotification";
 import CrossTabSyncIndicator from "./components/CrossTabSyncIndicator";
+import ServerSyncIndicator from "./components/ServerSyncIndicator";
 import { CartDrawer } from "./components/CartDrawer";
 import ComparisonDrawer from "./components/ComparisonDrawer";
 
@@ -78,6 +79,7 @@ export default function RootLayout({
         <OnlineStatus />
         <UpdateNotification />
         <CrossTabSyncIndicator />
+        <ServerSyncIndicator />
         <Navbar/>
         {children}
         <Footer />
