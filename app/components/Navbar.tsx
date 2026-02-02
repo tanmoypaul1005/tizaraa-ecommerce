@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CartBadge } from "./CartBadge";
 import { WishlistBadge } from "./WishlistBadge";
+import ComparisonBadge from "./ComparisonBadge";
 import SearchBar from "./SearchBar";
 
 const Navbar = () => {
@@ -26,6 +27,7 @@ const Navbar = () => {
                         >
                             Products
                         </Link>
+                        <ComparisonBadge />
                         <WishlistBadge />
                         <CartBadge />
                     </div>

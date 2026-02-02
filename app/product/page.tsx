@@ -385,6 +385,7 @@ const ProductsPage = () => {
                                         category={product.category}
                                         tags={product.tags}
                                         inStock={product.inStock}
+                                        fullProduct={product}
                                     />
                                 ))}
                             </div>

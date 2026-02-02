@@ -9,6 +9,7 @@ import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import UpdateNotification from "./components/UpdateNotification";
 import CrossTabSyncIndicator from "./components/CrossTabSyncIndicator";
 import { CartDrawer } from "./components/CartDrawer";
+import ComparisonDrawer from "./components/ComparisonDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -82,6 +83,7 @@ export default function RootLayout({
         <Footer />
         <PWAInstallPrompt />
         <CartDrawer />
+        <ComparisonDrawer />
       </body>
     </html>
   );

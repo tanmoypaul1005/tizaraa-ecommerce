@@ -3,9 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart, Star, ArrowLeftRight, Check } from 'lucide-react';
 import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
 import { useRouter } from 'next/navigation';
+import { useComparisonStore } from '../store/comparisonStore';
 
 interface ProductCardProps {
   id: string;
@@ -19,6 +20,7 @@ interface ProductCardProps {
   category: string;
   tags: string[];
   inStock: boolean;
+  fullProduct?: any;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -33,16 +35,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
   category,
   tags,
   inStock,
+  fullProduct,
 }) => {
   const discount = compareAtPrice
     ? Math.round(((compareAtPrice - basePrice) / compareAtPrice) * 100)
     : 0;
 
   const router = useRouter();
+  const { toggleProduct, isInComparison } = useComparisonStore();
+  const inComparison = isInComparison(id);
 
   // Prefetch on hover for faster navigation
   const handleMouseEnter = () => {
     router.prefetch(`/product/${id}`);
+  };
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (fullProduct) {
+      toggleProduct(fullProduct);
+    }
   };
 
   return (
@@ -81,6 +95,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           )}
         </div>
+
+        {/* Compare Button */}
+        {fullProduct && (
+          <button
+            onClick={handleCompareClick}
+            className={`absolute top-3 right-3 p-2 rounded-lg transition-all ${
+              inComparison
+                ? 'bg-blue-600 text-white shadow-lg scale-110'
+                : 'bg-white/90 hover:bg-white text-gray-700 hover:text-blue-600 shadow-md'
+            }`}
+            title={inComparison ? 'Remove from comparison' : 'Add to comparison'}
+          >
+            {inComparison ? (
+              <Check className="w-5 h-5" />
+            ) : (
+              <ArrowLeftRight className="w-5 h-5" />
+            )}
+          </button>
+        )}
 
         {/* Quick Add to Cart */}
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
