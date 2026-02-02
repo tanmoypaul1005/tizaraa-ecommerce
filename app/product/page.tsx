@@ -175,7 +175,7 @@ const ProductsPage = () => {
                         lg:flex-shrink-0
                         overflow-y-auto
                     `}>
-                        <div className="bg-white lg:rounded-xl lg:shadow-sm lg:border border-gray-200 p-4 sm:p-6 lg:sticky lg:top-24 h-full lg:h-auto">
+                        <div className="bg-white lg:rounded-xl lg:shadow-sm lg:border border-gray-200 p-4 sm:p-6 lg:sticky h-full lg:h-auto">
                             <div className="flex items-center justify-between mb-4 sm:mb-6">
                                 <h3 className="font-bold text-lg sm:text-xl text-gray-900">Filters</h3>
                                 <div className="flex items-center gap-2 sm:gap-3">
