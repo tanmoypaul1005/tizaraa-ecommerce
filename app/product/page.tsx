@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import ProductCard from '@/app/components/ProductCard';
 import SortDropdown, { SortOption } from '@/app/components/SortDropdown';
 import { MOCK_PRODUCTS, sortProducts } from '@/app/data/products';
-import { Filter, Star } from 'lucide-react';
+import { Filter, Search, Star } from 'lucide-react';
 
 const ProductsPage = () => {
     const [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -14,6 +14,7 @@ const ProductsPage = () => {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [showFilters, setShowFilters] = useState(true);
+    const [colorSearch, setColorSearch] = useState<string>('');
 
     // Get unique values for filters
     const filterOptions = useMemo(() => {
@@ -141,34 +142,66 @@ const ProductsPage = () => {
         );
     };
 
+    // Filter colors based on search
+    const filteredColors = useMemo(() => {
+        if (!colorSearch.trim()) return filterOptions.colors;
+        return filterOptions.colors.filter(color =>
+            color.toLowerCase().includes(colorSearch.toLowerCase())
+        );
+    }, [filterOptions.colors, colorSearch]);
+
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-8">
-                {/* Header */}
-               
+            <div className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
+                <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 relative">
+                    {/* Mobile Filter Backdrop */}
+                    {showFilters && (
+                        <div
+                            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                            onClick={() => setShowFilters(false)}
+                        />
+                    )}
 
-                <div className="flex gap-6">
                     {/* Sidebar Filters */}
-                    <aside className={`${showFilters ? 'block' : 'hidden'} lg:block w-full lg:w-72 flex-shrink-0`}>
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
-                            <div className="flex items-center justify-between mb-6">
-                                <h3 className="font-bold text-lg text-gray-900">Filters</h3>
-                                {hasActiveFilters && (
+                    <aside className={`
+                        ${showFilters ? 'translate-x-0' : '-translate-x-full'}
+                        lg:translate-x-0
+                        fixed lg:relative
+                        inset-y-0 left-0
+                        w-80 sm:w-96 lg:w-72 xl:w-80
+                        bg-white
+                        z-50 lg:z-auto
+                        transition-transform duration-300 ease-in-out
+                        lg:flex-shrink-0
+                        overflow-y-auto
+                    `}>
+                        <div className="bg-white lg:rounded-xl lg:shadow-sm lg:border border-gray-200 p-4 sm:p-6 lg:sticky lg:top-24 h-full lg:h-auto">
+                            <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                <h3 className="font-bold text-lg sm:text-xl text-gray-900">Filters</h3>
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                    {hasActiveFilters && (
+                                        <button
+                                            onClick={clearFilters}
+                                            className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 font-medium"
+                                        >
+                                            Clear All
+                                        </button>
+                                    )}
                                     <button
-                                        onClick={clearFilters}
-                                        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                                        onClick={() => setShowFilters(false)}
+                                        className="lg:hidden p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
                                     >
-                                        Clear All
+                                        <Filter className="w-5 h-5 text-gray-600" />
                                     </button>
-                                )}
+                                </div>
                             </div>
 
-                            <div className="space-y-6">
+                            <div className="space-y-4 sm:space-y-6">
                                 {/* Category Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Category</h4>
                                     <div className="space-y-2">
-                                        {categories.map((cat) => (
+                                        {categories?.map((cat) => (
                                             <label
                                                 key={cat}
                                                 className="flex items-center justify-between cursor-pointer group"
@@ -290,8 +323,21 @@ const ProductsPage = () => {
                                 {/* Color Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Colors</h4>
-                                    <div className="space-y-2">
-                                        {filterOptions.colors.map((color) => (
+
+                                    <div className="relative mb-2">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            value={colorSearch}
+                                            onChange={(e) => setColorSearch(e.target.value)}
+                                            placeholder="Search colors..."
+                                            className="w-full pl-10 pr-4 py-1.5 bg-gray-50 border-0 rounded-lg text-sm outline-none ring-2 ring-blue-500 text-gray-900 placeholder-gray-500"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2 h-48 overflow-y-auto border-2 border-gray-200 rounded-lg p-2.5">
+                                        {filteredColors?.length > 0 ? (
+                                            filteredColors?.map((color) => (
                                             <label
                                                 key={color}
                                                 className="flex items-center justify-between cursor-pointer group"
@@ -311,7 +357,12 @@ const ProductsPage = () => {
                                                     {getFilterCount('color', color)}
                                                 </span>
                                             </label>
-                                        ))}
+                                        ))
+                                        ) : (
+                                            <div className="text-center py-8 text-sm text-gray-500">
+                                                No colors found
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -320,12 +371,13 @@ const ProductsPage = () => {
                                 {/* Size Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Sizes</h4>
+
                                     <div className="grid grid-cols-3 gap-2">
-                                        {filterOptions.sizes.map((size) => (
+                                        {filterOptions?.sizes?.map((size) => (
                                             <button
                                                 key={size}
                                                 onClick={() => toggleSize(size)}
-                                                className={`px-3 py-2 rounded-lg border-2 font-medium transition-all text-sm ${selectedSizes.includes(size)
+                                                className={`px-2 py-2 rounded-lg border-2 font-medium transition-all text-xs ${selectedSizes.includes(size)
                                                     ? 'border-blue-600 bg-blue-50 text-blue-700'
                                                     : 'border-gray-300 text-gray-700 hover:border-gray-400'
                                                     }`}
@@ -340,38 +392,40 @@ const ProductsPage = () => {
                     </aside>
 
                     {/* Main Content */}
-                    <main className="flex-1 w-full">
+                    <main className="flex-1 w-full min-w-0">
 
                         {/* Mobile Filter Toggle & Sort */}
-                        <div className="flex items-center gap-4 mb-6 justify-between w-full">
-                            <div className="">
-                                <h1 className="text-4xl font-bold text-gray-900 mb-2">All Products</h1>
-                                <p className="text-gray-600">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 justify-between">
+                            <div className="w-full sm:w-auto">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">All Products</h1>
+                                <p className="text-sm sm:text-base text-gray-600">
                                     Showing {sortedProducts?.length} of {MOCK_PRODUCTS.length} products
                                 </p>
                             </div>
 
-                            <div>
+                            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                                 <button
                                     onClick={() => setShowFilters(!showFilters)}
-                                    className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-xl font-medium text-gray-700"
+                                    className="lg:hidden flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-300 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
                                 >
                                     <Filter className="w-4 h-4" />
-                                    Filters
+                                    <span>Filters</span>
                                     {hasActiveFilters && (
                                         <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
                                             Active
                                         </span>
                                     )}
                                 </button>
-                                <SortDropdown value={sortBy} onChange={setSortBy} />
+                                <div className="flex-1 sm:flex-none">
+                                    <SortDropdown value={sortBy} onChange={setSortBy} />
+                                </div>
                             </div>
                         </div>
 
                         {/* Products Grid */}
                         {sortedProducts?.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                                {sortedProducts.map((product) => (
+                            <div className="grid px-5 md:px-0 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                                {sortedProducts?.map((product) => (
                                     <ProductCard
                                         key={product?.id}
                                         id={product?.id}
@@ -390,12 +444,12 @@ const ProductsPage = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-                                <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                    <Filter className="w-10 h-10 text-gray-400" />
+                            <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 md:p-12 text-center">
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                                    <Filter className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">No products found</h3>
-                                <p className="text-gray-600 mb-4">
+                                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">No products found</h3>
+                                <p className="text-sm sm:text-base text-gray-600 mb-4">
                                     Try adjusting your filters to see more results
                                 </p>
                                 <button
