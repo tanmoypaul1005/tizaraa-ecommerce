@@ -55,6 +55,7 @@ interface CartState {
 }
 
 let syncChannel: BroadcastChannel | null = null;
+let isProcessingExternalUpdate = false;
 
 export const useCartStore = create<CartState>((set, get) => {
   // Initialize sync channel
@@ -63,16 +64,60 @@ export const useCartStore = create<CartState>((set, get) => {
     
     if (syncChannel) {
       syncChannel.onmessage = (event) => {
-        if (event.data.type === 'cart-updated') {
-          get().loadFromDB();
+        // Prevent processing our own messages
+        if (isProcessingExternalUpdate) return;
+        
+        const { type, payload } = event.data;
+        
+        // Set flag to prevent infinite loops
+        isProcessingExternalUpdate = true;
+        
+        try {
+          switch (type) {
+            case 'cart-updated':
+            case 'item-added':
+            case 'item-removed':
+            case 'quantity-updated':
+            case 'cart-cleared':
+            case 'item-moved-to-saved':
+            case 'item-moved-to-cart':
+            case 'saved-item-removed':
+              // Reload entire cart state from DB for all cart operations
+              get().loadFromDB();
+              break;
+              
+            case 'promo-applied':
+              if (payload?.code) {
+                set({
+                  promoCode: payload.code,
+                  promoDiscount: payload.discount,
+                  promoMessage: payload.message,
+                });
+                get().calculateTotals();
+              }
+              break;
+              
+            case 'promo-removed':
+              set({ promoCode: null, promoDiscount: 0, promoMessage: '' });
+              get().calculateTotals();
+              break;
+              
+            default:
+              console.log('Unknown sync message type:', type);
+          }
+        } finally {
+          // Reset flag after processing
+          setTimeout(() => {
+            isProcessingExternalUpdate = false;
+          }, 100);
         }
       };
     }
   }
 
-  const broadcastUpdate = () => {
-    if (syncChannel) {
-      syncChannel.postMessage({ type: 'cart-updated' });
+  const broadcastUpdate = (type: string, payload?: any) => {
+    if (syncChannel && !isProcessingExternalUpdate) {
+      syncChannel.postMessage({ type, payload, timestamp: Date.now() });
     }
   };
 
@@ -147,7 +192,7 @@ export const useCartStore = create<CartState>((set, get) => {
         try {
           await cartDB.saveCartItem(newItem);
           get().calculateTotals();
-          broadcastUpdate();
+          broadcastUpdate('item-added', { id: newItem.id, productId: newItem.productId });
         } catch (error) {
           // Rollback on error
           set({ items: items.filter(item => item.id !== id) });
@@ -180,7 +225,7 @@ export const useCartStore = create<CartState>((set, get) => {
       try {
         await cartDB.saveCartItem({ ...item, quantity: validQuantity });
         get().calculateTotals();
-        broadcastUpdate();
+        broadcastUpdate('quantity-updated', { id, quantity: validQuantity });
       } catch (error) {
         // Rollback on error
         const rolledBackItems = items.map(i =>
@@ -203,7 +248,7 @@ export const useCartStore = create<CartState>((set, get) => {
       try {
         await cartDB.removeCartItem(id);
         get().calculateTotals();
-        broadcastUpdate();
+        broadcastUpdate('item-removed', { id });
       } catch (error) {
         // Rollback on error
         set({ items: previousItems });
@@ -223,7 +268,7 @@ export const useCartStore = create<CartState>((set, get) => {
       try {
         await cartDB.clearCart();
         get().calculateTotals();
-        broadcastUpdate();
+        broadcastUpdate('cart-cleared');
       } catch (error) {
         // Rollback on error
         set({ items: previousItems });
@@ -256,7 +301,7 @@ export const useCartStore = create<CartState>((set, get) => {
           cartDB.saveSavedItem(savedItem),
         ]);
         get().calculateTotals();
-        broadcastUpdate();
+        broadcastUpdate('item-moved-to-saved', { id });
       } catch (error) {
         // Rollback on error
         set({ items, savedItems });
@@ -290,7 +335,7 @@ export const useCartStore = create<CartState>((set, get) => {
           cartDB.saveCartItem(itemWithNewTimestamp),
         ]);
         get().calculateTotals();
-        broadcastUpdate();
+        broadcastUpdate('item-moved-to-cart', { id });
       } catch (error) {
         // Rollback on error
         set({ items, savedItems });
@@ -309,7 +354,7 @@ export const useCartStore = create<CartState>((set, get) => {
       
       try {
         await cartDB.removeSavedItem(id);
-        broadcastUpdate();
+        broadcastUpdate('saved-item-removed', { id });
       } catch (error) {
         // Rollback on error
         set({ savedItems: previousSaved });
@@ -348,6 +393,11 @@ export const useCartStore = create<CartState>((set, get) => {
           promoMessage: result.message,
         });
         get().calculateTotals();
+        broadcastUpdate('promo-applied', {
+          code: code.toUpperCase(),
+          discount: result.discount,
+          message: result.message,
+        });
       } else {
         set({
           promoCode: null,
@@ -361,6 +411,7 @@ export const useCartStore = create<CartState>((set, get) => {
     removePromoCode: () => {
       set({ promoCode: null, promoDiscount: 0, promoMessage: '' });
       get().calculateTotals();
+      broadcastUpdate('promo-removed');
     },
 
     // UI actions

@@ -16,6 +16,7 @@ interface WishlistState {
 }
 
 let syncChannel: BroadcastChannel | null = null;
+let isProcessingExternalUpdate = false;
 
 export const useWishlistStore = create<WishlistState>((set, get) => {
   // Initialize sync channel
@@ -23,15 +24,39 @@ export const useWishlistStore = create<WishlistState>((set, get) => {
     syncChannel = new BroadcastChannel('wishlist-sync');
     
     syncChannel.onmessage = (event) => {
-      if (event.data.type === 'wishlist-updated') {
-        get().loadFromDB();
+      // Prevent processing our own messages
+      if (isProcessingExternalUpdate) return;
+      
+      const { type, payload } = event.data;
+      
+      // Set flag to prevent infinite loops
+      isProcessingExternalUpdate = true;
+      
+      try {
+        switch (type) {
+          case 'wishlist-updated':
+          case 'item-added':
+          case 'item-removed':
+          case 'item-toggled':
+            // Reload wishlist state from DB
+            get().loadFromDB();
+            break;
+            
+          default:
+            console.log('Unknown wishlist sync message type:', type);
+        }
+      } finally {
+        // Reset flag after processing
+        setTimeout(() => {
+          isProcessingExternalUpdate = false;
+        }, 100);
       }
     };
   }
 
-  const broadcastUpdate = () => {
-    if (syncChannel) {
-      syncChannel.postMessage({ type: 'wishlist-updated' });
+  const broadcastUpdate = (type: string, payload?: any) => {
+    if (syncChannel && !isProcessingExternalUpdate) {
+      syncChannel.postMessage({ type, payload, timestamp: Date.now() });
     }
   };
 
@@ -55,7 +80,7 @@ export const useWishlistStore = create<WishlistState>((set, get) => {
         
         try {
           await cartDB.addToWishlist(newItem);
-          broadcastUpdate();
+          broadcastUpdate('item-added', { productId: newItem.productId });
         } catch (error) {
           // Rollback on error
           set({ items: items.filter(item => item.productId !== newItem.productId) });
@@ -78,7 +103,7 @@ export const useWishlistStore = create<WishlistState>((set, get) => {
       
       try {
         await cartDB.removeFromWishlist(productId);
-        broadcastUpdate();
+        broadcastUpdate('item-removed', { productId });
       } catch (error) {
         // Rollback on error
         set({ items: previousItems });

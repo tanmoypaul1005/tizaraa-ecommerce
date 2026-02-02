@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { useCartStore } from '../store/cartStore';
 import { Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRef } from 'react';
+import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 const RecentlyViewed = () => {
   const { recentlyViewed } = useCartStore();
@@ -74,10 +76,15 @@ const RecentlyViewed = () => {
               <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 h-full flex flex-col">
                 {/* Image */}
                 <div className="relative aspect-square overflow-hidden bg-gray-100 flex-shrink-0">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 192px"
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    placeholder="blur"
+                    blurDataURL={shimmerBlurDataUrl}
+                    quality={75}
                   />
                 </div>
 

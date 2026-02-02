@@ -4,6 +4,8 @@ import { Heart } from 'lucide-react';
 import { useWishlistStore } from '../store/wishlistStore';
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
 
 export const WishlistBadge = () => {
   const { items } = useWishlistStore();
@@ -55,11 +57,18 @@ export const WishlistBadge = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                   >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
+                    <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                        placeholder="blur"
+                        blurDataURL={shimmerBlurDataUrl}
+                        quality={70}
+                      />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-gray-900 truncate text-sm">
                         {item.name}

@@ -3,9 +3,38 @@ import ProductCard from "./components/ProductCard";
 import RecentlyViewed from "./components/RecentlyViewed";
 import { getFeaturedProducts } from "./data/products";
 import { Sparkles, Zap, Shield, Truck } from "lucide-react";
+import { Suspense } from "react";
+import { ProductListSkeleton } from "./components/Skeletons";
+
+// Async component for featured products
+async function FeaturedProductsGrid() {
+  // Simulate async data fetching
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const featuredProducts = getFeaturedProducts(6);
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 px-36">
+      {featuredProducts.map((product) => (
+        <ProductCard
+          key={product?.id}
+          id={product?.id}
+          name={product?.name}
+          shortDescription={product?.shortDescription}
+          basePrice={product?.basePrice}
+          compareAtPrice={product?.compareAtPrice}
+          rating={product?.rating}
+          reviewCount={product?.reviewCount}
+          image={product?.images[0].url}
+          category={product?.category}
+          tags={product?.tags}
+          inStock={product?.inStock}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
-  const featuredProducts = getFeaturedProducts(6);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -71,24 +100,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 px-36">
-            {featuredProducts.map((product) => (
-              <ProductCard
-                key={product?.id}
-                id={product?.id}
-                name={product?.name}
-                shortDescription={product?.shortDescription}
-                basePrice={product?.basePrice}
-                compareAtPrice={product?.compareAtPrice}
-                rating={product?.rating}
-                reviewCount={product?.reviewCount}
-                image={product?.images[0].url}
-                category={product?.category}
-                tags={product?.tags}
-                inStock={product?.inStock}
-              />
-            ))}
-          </div>
+          <Suspense fallback={<ProductListSkeleton />}>
+            <FeaturedProductsGrid />
+          </Suspense>
         </div>
       </section>
 

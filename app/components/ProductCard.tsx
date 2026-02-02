@@ -3,7 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Star, Heart } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
+import { shimmerBlurDataUrl } from '../lib/blur-placeholder';
+import { useRouter } from 'next/navigation';
 
 interface ProductCardProps {
   id: string;
@@ -36,8 +38,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
     ? Math.round(((compareAtPrice - basePrice) / compareAtPrice) * 100)
     : 0;
 
+  const router = useRouter();
+
+  // Prefetch on hover for faster navigation
+  const handleMouseEnter = () => {
+    router.prefetch(`/product/${id}`);
+  };
+
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
+    <div 
+      className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+      onMouseEnter={handleMouseEnter}
+    >
       {/* Image Section */}
       <Link href={`/product/${id}`} className="block relative aspect-square overflow-hidden bg-gray-50">
         <Image
@@ -46,6 +58,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          placeholder="blur"
+          blurDataURL={shimmerBlurDataUrl}
+          quality={80}
         />
         
         {/* Badges */}
@@ -66,11 +81,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </span>
           )}
         </div>
-
-        {/* Wishlist Button */}
-        <button className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white hover:scale-110">
-          <Heart className="w-4 h-4 text-gray-700" />
-        </button>
 
         {/* Quick Add to Cart */}
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
