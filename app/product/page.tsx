@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import ProductCard from '@/app/components/ProductCard';
 import SortDropdown, { SortOption } from '@/app/components/SortDropdown';
 import { MOCK_PRODUCTS, sortProducts } from '@/app/data/products';
-import { Filter, Star } from 'lucide-react';
+import { Filter, Search, Star } from 'lucide-react';
 
 const ProductsPage = () => {
     const [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -14,6 +14,7 @@ const ProductsPage = () => {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [showFilters, setShowFilters] = useState(true);
+    const [colorSearch, setColorSearch] = useState<string>('');
 
     // Get unique values for filters
     const filterOptions = useMemo(() => {
@@ -141,18 +142,26 @@ const ProductsPage = () => {
         );
     };
 
+    // Filter colors based on search
+    const filteredColors = useMemo(() => {
+        if (!colorSearch.trim()) return filterOptions.colors;
+        return filterOptions.colors.filter(color =>
+            color.toLowerCase().includes(colorSearch.toLowerCase())
+        );
+    }, [filterOptions.colors, colorSearch]);
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
                 <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 relative">
                     {/* Mobile Filter Backdrop */}
                     {showFilters && (
-                        <div 
+                        <div
                             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
                             onClick={() => setShowFilters(false)}
                         />
                     )}
-                    
+
                     {/* Sidebar Filters */}
                     <aside className={`
                         ${showFilters ? 'translate-x-0' : '-translate-x-full'}
@@ -314,8 +323,21 @@ const ProductsPage = () => {
                                 {/* Color Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Colors</h4>
-                                    <div className="space-y-2 h-48 overflow-y-auto">
-                                        {filterOptions.colors.map((color) => (
+
+                                    <div className="relative mb-2">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            value={colorSearch}
+                                            onChange={(e) => setColorSearch(e.target.value)}
+                                            placeholder="Search colors..."
+                                            className="w-full pl-10 pr-4 py-1.5 bg-gray-50 border-0 rounded-lg text-sm outline-none ring-2 ring-blue-500 text-gray-900 placeholder-gray-500"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2 h-48 overflow-y-auto border-2 border-gray-200 rounded-lg p-2.5">
+                                        {filteredColors?.length > 0 ? (
+                                            filteredColors?.map((color) => (
                                             <label
                                                 key={color}
                                                 className="flex items-center justify-between cursor-pointer group"
@@ -335,7 +357,12 @@ const ProductsPage = () => {
                                                     {getFilterCount('color', color)}
                                                 </span>
                                             </label>
-                                        ))}
+                                        ))
+                                        ) : (
+                                            <div className="text-center py-8 text-sm text-gray-500">
+                                                No colors found
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -344,6 +371,7 @@ const ProductsPage = () => {
                                 {/* Size Filter */}
                                 <div>
                                     <h4 className="font-semibold text-gray-900 mb-3">Sizes</h4>
+
                                     <div className="grid grid-cols-3 gap-2">
                                         {filterOptions.sizes.map((size) => (
                                             <button
