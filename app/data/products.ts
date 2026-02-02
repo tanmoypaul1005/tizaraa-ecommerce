@@ -125,10 +125,10 @@ export const MOCK_PRODUCTS: Product[] = [
         { id: 'fleece', name: 'Premium Fleece', value: 'fleece', available: true, priceModifier: 15 },
       ],
       sizes: [
-        { id: 's', name: 'Small', value: 'S', available: true },
-        { id: 'm', name: 'Medium', value: 'M', available: true },
-        { id: 'l', name: 'Large', value: 'L', available: true },
-        { id: 'xl', name: 'Extra Large', value: 'XL', available: true },
+        { id: 's', name: 'Small', value: 'S', available: true, priceModifier: 0 },
+        { id: 'm', name: 'Medium', value: 'M', available: true, priceModifier: 10 },
+        { id: 'l', name: 'Large', value: 'L', available: true, priceModifier: 20 },
+        { id: 'xl', name: 'Extra Large', value: 'XL', available: true, priceModifier: 30 },
       ],
     },
     specifications: [
@@ -165,9 +165,9 @@ export const MOCK_PRODUCTS: Product[] = [
         { id: 'hard', name: 'Hard Case', value: 'hard', available: true, priceModifier: 5 },
       ],
       sizes: [
-        { id: 'iphone14', name: 'iPhone 14', value: 'iPhone 14', available: true },
-        { id: 'iphone15', name: 'iPhone 15', value: 'iPhone 15', available: true },
-        { id: 'samsung', name: 'Samsung S24', value: 'Samsung', available: true },
+        { id: 'iphone14', name: 'iPhone 14', value: 'iPhone 14', available: true , priceModifier: 0 },
+        { id: 'iphone15', name: 'iPhone 15', value: 'iPhone 15', available: true, priceModifier: 20 },
+        { id: 'samsung', name: 'Samsung S24', value: 'Samsung', available: true, priceModifier: 35 },
       ],
     },
     specifications: [
@@ -240,7 +240,7 @@ export const MOCK_PRODUCTS: Product[] = [
         { id: 'steel', name: 'Stainless Steel', value: 'steel', available: true },
       ],
       sizes: [
-        { id: '500ml', name: '500ml', value: '500ml', available: true },
+        { id: '500ml', name: '500ml', value: '500ml', available: true , priceModifier: 0},
         { id: '750ml', name: '750ml', value: '750ml', available: true, priceModifier: 10 },
         { id: '1000ml', name: '1000ml', value: '1L', available: true, priceModifier: 15 },
       ],
@@ -276,11 +276,11 @@ export const MOCK_PRODUCTS: Product[] = [
       ],
       materials: [
         { id: 'canvas', name: '100% Cotton Canvas', value: 'canvas', available: true },
-        { id: 'organic', name: 'Organic Cotton', value: 'organic', available: true, priceModifier: 8 },
+        { id: 'organic', name: 'Organic Cotton', value: 'organic', available: true, priceModifier: 18 },
       ],
       sizes: [
         { id: 'medium', name: 'Medium', value: 'M', available: true },
-        { id: 'large', name: 'Large', value: 'L', available: true, priceModifier: 5 },
+        { id: 'large', name: 'Large', value: 'L', available: true, priceModifier: 10 },
       ],
     },
     specifications: [
