@@ -59,8 +59,8 @@ export const WishlistBadge = () => {
                   >
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                       <Image
-                        src={item.image}
-                        alt={item.name}
+                        src={item?.image}
+                        alt={item?.name}
                         fill
                         className="object-cover"
                         sizes="64px"
