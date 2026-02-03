@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { useDebounce } from 'use-debounce';
 import { MOCK_PRODUCTS, Product } from '@/app/data/products';
 
 interface SearchResult extends Product {
@@ -15,6 +16,9 @@ const SearchBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Debounce search query to avoid excessive searches while typing
+  const [debouncedQuery] = useDebounce(query, 300);
 
   // Load recent searches from localStorage
   useEffect(() => {
@@ -36,14 +40,14 @@ const SearchBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Real-time search
+  // Real-time search with debounce
   useEffect(() => {
-    if (query.trim().length < 2) {
+    if (debouncedQuery.trim().length < 2) {
       setResults([]);
       return;
     }
 
-    const searchTerm = query.toLowerCase().trim();
+    const searchTerm = debouncedQuery.toLowerCase().trim();
     const foundProducts: SearchResult[] = [];
 
     MOCK_PRODUCTS.forEach((product) => {
@@ -66,7 +70,7 @@ const SearchBar = () => {
     });
 
     setResults(foundProducts.slice(0, 5)); // Limit to 5 results
-  }, [query]);
+  }, [debouncedQuery]);
 
   const highlightText = (text: string, query: string) => {
     if (!query.trim()) return text;
