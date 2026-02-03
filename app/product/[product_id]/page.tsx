@@ -38,7 +38,7 @@ export default function ProductDetailsPage() {
   const [productUrl, setProductUrl] = useState('');
 
   // Check if product is in wishlist
-  const productInWishlist = product ? isInWishlist(product.id) : false;
+  const productInWishlist = product ? isInWishlist(product?.id) : false;
 
   // Update URL when configuration changes (without page reload)
   useEffect(() => {
