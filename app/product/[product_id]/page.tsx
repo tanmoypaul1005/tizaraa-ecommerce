@@ -87,19 +87,19 @@ export default function ProductDetailsPage() {
       }
 
       // Validate and set material from URL or use first available
-      if (urlMaterial && product.variants.materials.find(m => m.id === urlMaterial && m.available)) {
+      if (urlMaterial && product?.variants?.materials?.find(m => m.id === urlMaterial && m.available)) {
         setSelectedMaterial(urlMaterial);
       } else {
-        const firstAvailableMaterial = product.variants.materials.find(m => m.available);
+        const firstAvailableMaterial = product?.variants?.materials?.find(m => m.available);
         if (firstAvailableMaterial) setSelectedMaterial(firstAvailableMaterial.id);
       }
 
       // Validate and set size from URL or use first available
-      if (urlSize && product.variants.sizes.find(s => s.id === urlSize && s.available)) {
+      if (urlSize && product?.variants?.sizes?.find(s => s.id === urlSize && s.available)) {
         setSelectedSize(urlSize);
       } else {
-        const firstAvailableSize = product.variants.sizes.find(s => s.available);
-        if (firstAvailableSize) setSelectedSize(firstAvailableSize.id);
+        const firstAvailableSize = product?.variants?.size?s.find(s => s.available);
+        if (firstAvailableSize) setSelectedSize(firstAvailableSize?.id);
       }
 
       // setCurrentPrice(product.basePrice);
@@ -126,9 +126,9 @@ export default function ProductDetailsPage() {
     const isIncompatible = false;
     setShowIncompatibleWarning(isIncompatible);
 
-    const colorVariant = product.variants.colors.find(c => c.id === selectedColor);
-    const materialVariant = product.variants.materials.find(m => m.id === selectedMaterial);
-    const sizeVariant = product.variants.sizes.find(s => s.id === selectedSize);
+    const colorVariant = product?.variants?.colors?.find(c => c.id === selectedColor);
+    const materialVariant = product?.variants?.materials?.find(m => m.id === selectedMaterial);
+    const sizeVariant = product?.variants?.sizes?.find(s => s.id === selectedSize);
 
     if (!colorVariant?.available || !materialVariant?.available || !sizeVariant?.available) {
       setStockStatus('out-of-stock');
@@ -224,20 +224,20 @@ export default function ProductDetailsPage() {
             <ProductImageGallery 
               images={product.images} 
               show3DViewer={true}
-              productColor={product?.variants?.colors.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
+              productColor={product?.variants?.colors?.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
               productMaterial={selectedMaterial}
-              productType={product.model3D || 'default'}
-              productName={product.name}
+              productType={product?.model3D || 'default'}
+              productName={product?.name}
             />
           </div>
 
           <div className="space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product.name}</h1>
-              <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product?.name}</h1>
+              <ProductRating rating={product?.rating} reviewCount={product?.reviewCount} />
             </div>
 
-            <p className="text-lg text-gray-600 leading-relaxed">{product.description}</p>
+            <p className="text-lg text-gray-600 leading-relaxed">{product?.description}</p>
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-3">
@@ -274,7 +274,7 @@ export default function ProductDetailsPage() {
                 />
               )}
 
-              {product.variants.materials.length > 0 && (
+              {product?.variants?.materials?.length > 0 && (
                 <VariantSelector
                   label="Material"
                   type="material"
@@ -288,7 +288,7 @@ export default function ProductDetailsPage() {
                 <VariantSelector
                   label="Size"
                   type="size"
-                  options={product.variants.sizes}
+                  options={product?.variants?.sizes}
                   selected={selectedSize}
                   onSelect={setSelectedSize}
                 />
@@ -308,8 +308,8 @@ export default function ProductDetailsPage() {
               onToggleWishlist={handleToggleWishlist}
               onShare={handleShare}
               productUrl={productUrl}
-              productTitle={`${product.name} - Check out this amazing product!`}
-              productImage={product.images[0].url}
+              productTitle={`${product?.name} - Check out this amazing product!`}
+              productImage={product?.images[0]?.url}
             />
 
             <div className="border-t border-gray-200"></div>
@@ -327,7 +327,7 @@ export default function ProductDetailsPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">Total Price</p>
-            <p className="text-xl font-bold text-gray-900">${currentPrice.toFixed(2)}</p>
+            <p className="text-xl font-bold text-gray-900">${currentPrice?.toFixed(2)}</p>
           </div>
           <button
             onClick={handleAddToCart}
