@@ -51,7 +51,8 @@ const ProductsPage = () => {
                 matches = matches && p.basePrice >= priceRange[0] && p.basePrice <= priceRange[1];
             }
             if (filterType !== 'rating') {
-                matches = matches && p.rating >= minRating;
+                const productRating = p?.rating ?? 0;
+                matches = matches && productRating >= minRating;
             }
             if (filterType !== 'color' && selectedColors.length > 0) {
                 matches = matches && p.variants.colors.some(c => selectedColors.includes(c.name));
@@ -64,7 +65,8 @@ const ProductsPage = () => {
             if (filterType === 'category') {
                 matches = matches && (value === 'all' || p.category === value);
             } else if (filterType === 'rating') {
-                matches = matches && p.rating >= value;
+                const productRating = p?.rating ?? 0;
+                matches = matches && productRating >= value;
             } else if (filterType === 'color') {
                 matches = matches && p.variants.colors.some(c => c.name === value);
             } else if (filterType === 'size') {
@@ -89,7 +91,10 @@ const ProductsPage = () => {
 
         // Filter by rating
         if (minRating > 0) {
-            filtered = filtered.filter(p => p.rating >= minRating);
+            filtered = filtered.filter(p => {
+                const productRating = p?.rating ?? 0;
+                return productRating >= minRating;
+            });
         }
 
         // Filter by colors
