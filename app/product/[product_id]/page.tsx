@@ -87,19 +87,19 @@ export default function ProductDetailsPage() {
       }
 
       // Validate and set material from URL or use first available
-      if (urlMaterial && product.variants.materials.find(m => m.id === urlMaterial && m.available)) {
+      if (urlMaterial && product?.variants?.materials?.find(m => m.id === urlMaterial && m.available)) {
         setSelectedMaterial(urlMaterial);
       } else {
-        const firstAvailableMaterial = product.variants.materials.find(m => m.available);
+        const firstAvailableMaterial = product?.variants?.materials?.find(m => m.available);
         if (firstAvailableMaterial) setSelectedMaterial(firstAvailableMaterial.id);
       }
 
       // Validate and set size from URL or use first available
-      if (urlSize && product.variants.sizes.find(s => s.id === urlSize && s.available)) {
+      if (urlSize && product?.variants?.sizes?.find(s => s.id === urlSize && s.available)) {
         setSelectedSize(urlSize);
       } else {
-        const firstAvailableSize = product.variants.sizes.find(s => s.available);
-        if (firstAvailableSize) setSelectedSize(firstAvailableSize.id);
+        const firstAvailableSize = product?.variants?.sizes?.find(s => s.available);
+        if (firstAvailableSize) setSelectedSize(firstAvailableSize?.id);
       }
 
       // setCurrentPrice(product.basePrice);
@@ -114,11 +114,11 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     if (!product) return;
 
-    let price = product.basePrice;
-    const selectedMat = product.variants.materials.find(m => m.id === selectedMaterial);
+    let price = product?.basePrice;
+    const selectedMat = product?.variants?.materials.find(m => m.id === selectedMaterial);
     if (selectedMat?.priceModifier) price += selectedMat.priceModifier;
 
-    const selectedSz = product.variants.sizes.find(s => s.id === selectedSize);
+    const selectedSz = product?.variants?.sizes?.find(s => s.id === selectedSize);
     if (selectedSz?.priceModifier) price += selectedSz.priceModifier;
 
     setCurrentPrice(price);
@@ -126,9 +126,9 @@ export default function ProductDetailsPage() {
     const isIncompatible = false;
     setShowIncompatibleWarning(isIncompatible);
 
-    const colorVariant = product.variants.colors.find(c => c.id === selectedColor);
-    const materialVariant = product.variants.materials.find(m => m.id === selectedMaterial);
-    const sizeVariant = product.variants.sizes.find(s => s.id === selectedSize);
+    const colorVariant = product?.variants?.colors.find(c => c.id === selectedColor);
+    const materialVariant = product?.variants?.materials.find(m => m.id === selectedMaterial);
+    const sizeVariant = product?.variants?.sizes?.find(s => s.id === selectedSize);
 
     if (!colorVariant?.available || !materialVariant?.available || !sizeVariant?.available) {
       setStockStatus('out-of-stock');
@@ -222,12 +222,12 @@ export default function ProductDetailsPage() {
           <div className="lg:sticky lg:top-8 lg:self-start">
             {/* Product Images with 3D Viewer as First Image */}
             <ProductImageGallery 
-              images={product.images} 
+              images={product?.images} 
               show3DViewer={true}
-              productColor={product?.variants?.colors.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
+              productColor={product?.variants?.colors?.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
               productMaterial={selectedMaterial}
-              productType={product.model3D || 'default'}
-              productName={product.name}
+              productType={product?.model3D || 'default'}
+              productName={product?.name}
             />
           </div>
 
@@ -288,7 +288,7 @@ export default function ProductDetailsPage() {
                 <VariantSelector
                   label="Size"
                   type="size"
-                  options={product.variants.sizes}
+                  options={product?.variants?.sizes}
                   selected={selectedSize}
                   onSelect={setSelectedSize}
                 />
@@ -308,8 +308,8 @@ export default function ProductDetailsPage() {
               onToggleWishlist={handleToggleWishlist}
               onShare={handleShare}
               productUrl={productUrl}
-              productTitle={`${product.name} - Check out this amazing product!`}
-              productImage={product.images[0].url}
+              productTitle={`${product?.name} - Check out this amazing product!`}
+              productImage={product?.images[0]?.url}
             />
 
             <div className="border-t border-gray-200"></div>
