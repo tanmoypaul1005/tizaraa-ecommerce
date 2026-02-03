@@ -36,6 +36,10 @@ export default function ProductDetailsPage() {
   const [isSticky, setIsSticky] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [productUrl, setProductUrl] = useState('');
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<{ code: string; discount: number } | null>(null);
+  const [promoError, setPromoError] = useState('');
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
 
   // Check if product is in wishlist
   const productInWishlist = product ? isInWishlist(product.id) : false;
@@ -159,6 +163,79 @@ export default function ProductDetailsPage() {
 
   const isAvailable = stockStatus !== 'out-of-stock' && !showIncompatibleWarning;
 
+  // Promotional codes (in real app, this would come from backend)
+  const PROMO_CODES: { [key: string]: { discount: number; minPurchase?: number } } = {
+    'SAVE10': { discount: 0.10, minPurchase: 50 },
+    'SAVE20': { discount: 0.20, minPurchase: 100 },
+    'WELCOME15': { discount: 0.15 },
+    'FREESHIP': { discount: 0.05 },
+  };
+
+  // Quantity-based discounts
+  const getQuantityDiscount = (qty: number): number => {
+    if (qty >= 10) return 0.20; // 20% off for 10+
+    if (qty >= 5) return 0.10;  // 10% off for 5+
+    if (qty >= 3) return 0.05;  // 5% off for 3+
+    return 0;
+  };
+
+  // Calculate total with discounts
+  const calculateTotal = () => {
+    const baseTotal = currentPrice * quantity;
+    const quantityDiscount = getQuantityDiscount(quantity);
+    const quantityDiscountAmount = baseTotal * quantityDiscount;
+    const subtotalAfterQtyDiscount = baseTotal - quantityDiscountAmount;
+    
+    const promoDiscount = appliedPromo ? appliedPromo.discount : 0;
+    const promoDiscountAmount = subtotalAfterQtyDiscount * promoDiscount;
+    const finalTotal = subtotalAfterQtyDiscount - promoDiscountAmount;
+
+    return {
+      baseTotal,
+      quantityDiscount,
+      quantityDiscountAmount,
+      promoDiscount,
+      promoDiscountAmount,
+      finalTotal,
+      totalSavings: quantityDiscountAmount + promoDiscountAmount,
+    };
+  };
+
+  const totals = calculateTotal();
+
+  // Apply promo code
+  const handleApplyPromo = () => {
+    setIsApplyingPromo(true);
+    setPromoError('');
+
+    setTimeout(() => {
+      const code = promoCode.toUpperCase().trim();
+      const promo = PROMO_CODES[code];
+
+      if (!promo) {
+        setPromoError('Invalid promo code');
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      if (promo.minPurchase && totals.baseTotal < promo.minPurchase) {
+        setPromoError(`Minimum purchase of $${promo.minPurchase} required`);
+        setIsApplyingPromo(false);
+        return;
+      }
+
+      setAppliedPromo({ code, discount: promo.discount });
+      setPromoError('');
+      setIsApplyingPromo(false);
+    }, 500);
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoCode('');
+    setPromoError('');
+  };
+
   const handleAddToCart = async () => {
     if (!isAvailable || !product) return;
 
@@ -170,7 +247,7 @@ export default function ProductDetailsPage() {
         productId: product?.id,
         name: product?.name,
         image: product?.images[0]?.url,
-        price: currentPrice,
+        price: totals.finalTotal / quantity, // Use discounted price per item
         quantity,
         selectedColor: product?.variants?.colors?.find(c => c.id === selectedColor)?.name,
         selectedMaterial: product?.variants?.materials?.find(m => m.id === selectedMaterial)?.name,
@@ -296,6 +373,121 @@ export default function ProductDetailsPage() {
 
             <QuantitySelector quantity={quantity} max={stockQuantity} onChange={setQuantity} />
 
+            {/* Quantity Discount Info */}
+            {totals.quantityDiscount > 0 && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🎉</span>
+                    <div>
+                      <p className="font-semibold text-green-800">
+                        {(totals.quantityDiscount * 100).toFixed(0)}% Quantity Discount Applied!
+                      </p>
+                      <p className="text-sm text-green-600">
+                        You save ${totals.quantityDiscountAmount.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                {quantity < 10 && (
+                  <p className="text-xs text-green-600 mt-2">
+                    {quantity < 3 ? '🎁 Buy 3+ and save 5%' : quantity < 5 ? '🎁 Buy 5+ and save 10%' : '🎁 Buy 10+ and save 20%'}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Promotional Code */}
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-gray-900">
+                Promotional Code
+              </label>
+              {!appliedPromo ? (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    placeholder="Enter code"
+                    className="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none text-gray-900 font-medium"
+                    onKeyPress={(e) => e.key === 'Enter' && handleApplyPromo()}
+                  />
+                  <button
+                    onClick={handleApplyPromo}
+                    disabled={!promoCode.trim() || isApplyingPromo}
+                    className="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
+                  >
+                    {isApplyingPromo ? 'Applying...' : 'Apply'}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">✨</span>
+                    <div>
+                      <p className="font-semibold text-blue-800">
+                        {appliedPromo.code} Applied!
+                      </p>
+                      <p className="text-sm text-blue-600">
+                        {(appliedPromo.discount * 100).toFixed(0)}% off - Save ${totals.promoDiscountAmount.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleRemovePromo}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+              {promoError && (
+                <p className="text-sm text-red-600 flex items-center gap-1">
+                  <AlertTriangle className="w-4 h-4" />
+                  {promoError}
+                </p>
+              )}
+              <details className="text-xs text-gray-500">
+                <summary className="cursor-pointer hover:text-gray-700">Available codes</summary>
+                <div className="mt-2 space-y-1 pl-2">
+                  <p>• SAVE10 - 10% off on orders $50+</p>
+                  <p>• SAVE20 - 20% off on orders $100+</p>
+                  <p>• WELCOME15 - 15% off for new customers</p>
+                  <p>• FREESHIP - 5% off all orders</p>
+                </div>
+              </details>
+            </div>
+
+            {/* Price Summary */}
+            <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>Subtotal ({quantity} items)</span>
+                <span>${totals.baseTotal.toFixed(2)}</span>
+              </div>
+              {totals.quantityDiscount > 0 && (
+                <div className="flex justify-between text-sm text-green-600">
+                  <span>Quantity Discount ({(totals.quantityDiscount * 100).toFixed(0)}%)</span>
+                  <span>-${totals.quantityDiscountAmount.toFixed(2)}</span>
+                </div>
+              )}
+              {appliedPromo && (
+                <div className="flex justify-between text-sm text-blue-600">
+                  <span>Promo ({appliedPromo.code})</span>
+                  <span>-${totals.promoDiscountAmount.toFixed(2)}</span>
+                </div>
+              )}
+              {totals.totalSavings > 0 && (
+                <div className="flex justify-between text-sm font-semibold text-green-600 border-t border-gray-200 pt-2">
+                  <span>Total Savings</span>
+                  <span>-${totals.totalSavings.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-300 pt-2">
+                <span>Total</span>
+                <span>${totals.finalTotal.toFixed(2)}</span>
+              </div>
+            </div>
+
             <CustomizationSummary options={customizationOptions} onShare={handleShare} />
 
             <ProductActions
@@ -324,7 +516,12 @@ export default function ProductDetailsPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">Total Price</p>
-            <p className="text-xl font-bold text-gray-900">${currentPrice.toFixed(2)}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-bold text-gray-900">${totals.finalTotal.toFixed(2)}</p>
+              {totals.totalSavings > 0 && (
+                <span className="text-xs text-green-600 font-medium">Save ${totals.totalSavings.toFixed(2)}</span>
+              )}
+            </div>
           </div>
           <button
             onClick={handleAddToCart}
