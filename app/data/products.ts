@@ -48,7 +48,7 @@ export interface Specification {
 
 export const MOCK_PRODUCTS: Product[] = [
   {
-    id: '02',
+    id: '01',
     name: 'Designer Custom Hoodie',
     slug: 'designer-hoodie',
     shortDescription: 'Premium heavyweight hoodie with customizable design options.',
