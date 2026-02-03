@@ -11,9 +11,9 @@ interface Product3DViewerProps {
   autoRotate?: boolean;
 }
 
-// Product Image as 3D Rotating Card
+// Product Image as 3D Rotating Card with depth
 function ProductImageCard({ imageUrl }: { imageUrl: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
@@ -22,36 +22,76 @@ function ProductImageCard({ imageUrl }: { imageUrl: string }) {
     const loader = new THREE.TextureLoader();
     loader.load(
       imageUrl,
-      setTexture,
+      (loadedTexture) => {
+        loadedTexture.anisotropy = 16; // Better texture quality
+        setTexture(loadedTexture);
+      },
       undefined,
       (error) => console.error('Error loading texture:', error)
     );
   }, [imageUrl]);
 
   useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005;
+    if (groupRef.current) {
+      groupRef.current.rotation.y += 0.003; // Slower, more elegant rotation
     }
   });
 
   if (!texture) {
     return (
-      <RoundedBox args={[3, 3, 0.1]} radius={0.1} smoothness={4}>
+      <RoundedBox args={[3.2, 4, 0.15]} radius={0.15} smoothness={4}>
         <meshStandardMaterial color="#e5e7eb" />
       </RoundedBox>
     );
   }
 
   return (
-    <mesh ref={meshRef} castShadow receiveShadow>
-      <planeGeometry args={[3, 3]} />
-      <meshStandardMaterial 
-        map={texture} 
-        side={THREE.DoubleSide}
-        roughness={0.3}
-        metalness={0.1}
-      />
-    </mesh>
+    <group ref={groupRef}>
+      {/* Front face with product image */}
+      <mesh castShadow receiveShadow position={[0, 0, 0.08]}>
+        <planeGeometry args={[3, 4]} />
+        <meshStandardMaterial 
+          map={texture} 
+          roughness={0.2}
+          metalness={0.05}
+        />
+      </mesh>
+      
+      {/* Back face - white */}
+      <mesh castShadow receiveShadow position={[0, 0, -0.08]}>
+        <planeGeometry args={[3, 4]} />
+        <meshStandardMaterial 
+          color="#ffffff"
+          roughness={0.3}
+          metalness={0.05}
+        />
+      </mesh>
+
+      {/* Card edges for depth */}
+      {/* Top edge */}
+      <mesh castShadow receiveShadow position={[0, 2, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[3, 0.16]} />
+        <meshStandardMaterial color="#f3f4f6" roughness={0.4} />
+      </mesh>
+      
+      {/* Bottom edge */}
+      <mesh castShadow receiveShadow position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[3, 0.16]} />
+        <meshStandardMaterial color="#f3f4f6" roughness={0.4} />
+      </mesh>
+      
+      {/* Left edge */}
+      <mesh castShadow receiveShadow position={[-1.5, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[0.16, 4]} />
+        <meshStandardMaterial color="#f3f4f6" roughness={0.4} />
+      </mesh>
+      
+      {/* Right edge */}
+      <mesh castShadow receiveShadow position={[1.5, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[0.16, 4]} />
+        <meshStandardMaterial color="#f3f4f6" roughness={0.4} />
+      </mesh>
+    </group>
   );
 }
 
@@ -72,46 +112,94 @@ export default function Product3DViewer({
   if (!productImage) return null;
 
   return (
-    <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 relative">
-      <Canvas shadows>
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+    <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
+      <Canvas 
+        shadows 
+        dpr={[1, 2]} 
+        gl={{ 
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance"
+        }}
+      >
+        <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={45} />
         
-        {/* Lighting */}
-        <ambientLight intensity={0.5} />
+        {/* Enhanced Lighting for realism */}
+        <ambientLight intensity={0.3} />
+        
+        {/* Main key light */}
         <directionalLight
-          position={[10, 10, 5]}
-          intensity={1}
+          position={[5, 8, 5]}
+          intensity={1.2}
           castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
+          shadow-mapSize-width={4096}
+          shadow-mapSize-height={4096}
+          shadow-camera-far={50}
+          shadow-camera-left={-10}
+          shadow-camera-right={10}
+          shadow-camera-top={10}
+          shadow-camera-bottom={-10}
+          shadow-bias={-0.0001}
         />
-        <spotLight position={[-10, 10, -5]} intensity={0.3} />
-        <spotLight position={[10, -10, 5]} intensity={0.2} color="#fbbf24" />
+        
+        {/* Fill light */}
+        <directionalLight
+          position={[-5, 3, -5]}
+          intensity={0.4}
+          color="#b4d4ff"
+        />
+        
+        {/* Rim light for depth */}
+        <spotLight 
+          position={[0, 5, -8]} 
+          intensity={0.5} 
+          angle={0.6}
+          penumbra={0.5}
+          color="#ffd6a5"
+        />
+        
+        {/* Accent lights */}
+        <pointLight position={[3, -2, 3]} intensity={0.3} color="#ff6b9d" />
+        <pointLight position={[-3, -2, 3]} intensity={0.3} color="#4a90e2" />
 
         {/* 3D Model */}
         <Suspense fallback={<LoadingBox />}>
           <ProductImageCard imageUrl={productImage} />
-          <Environment preset="city" />
+          <Environment preset="studio" environmentIntensity={0.5} />
         </Suspense>
 
-        {/* Ground Plane */}
-        <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.5, 0]}>
-          <planeGeometry args={[10, 10]} />
-          <shadowMaterial opacity={0.2} />
+        {/* Realistic ground with reflection */}
+        <mesh 
+          receiveShadow 
+          rotation={[-Math.PI / 2, 0, 0]} 
+          position={[0, -2.5, 0]}
+        >
+          <planeGeometry args={[15, 15]} />
+          <meshStandardMaterial 
+            color="#1a1a2e"
+            roughness={0.1}
+            metalness={0.8}
+            envMapIntensity={0.5}
+          />
         </mesh>
 
-        {/* Controls */}
+        {/* Enhanced Controls */}
         <OrbitControls
           autoRotate={autoRotate}
-          autoRotateSpeed={2}
+          autoRotateSpeed={1}
           enableZoom={true}
           enablePan={false}
-          minDistance={3}
-          maxDistance={8}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 1.5}
+          minDistance={4}
+          maxDistance={10}
+          minPolarAngle={Math.PI / 6}
+          maxPolarAngle={Math.PI / 1.8}
+          dampingFactor={0.05}
+          enableDamping={true}
         />
       </Canvas>
+      
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
     </div>
   );
 }
