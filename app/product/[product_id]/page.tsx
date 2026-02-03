@@ -165,8 +165,8 @@ export default function ProductDetailsPage() {
 
   // Promotional codes (in real app, this would come from backend)
   const PROMO_CODES: { [key: string]: { discount: number; minPurchase?: number } } = {
-    'SAVE10': { discount: 0.10, minPurchase: 50 },
-    'SAVE20': { discount: 0.20, minPurchase: 100 },
+    'SAVE10': { discount: 0.10, minPurchase: 5 },
+    'SAVE20': { discount: 0.20, minPurchase: 10 },
     'WELCOME15': { discount: 0.15 },
     'FREESHIP': { discount: 0.05 },
   };
@@ -212,13 +212,26 @@ export default function ProductDetailsPage() {
       const code = promoCode.toUpperCase().trim();
       const promo = PROMO_CODES[code];
 
+      
+
       if (!promo) {
         setPromoError('Invalid promo code');
         setIsApplyingPromo(false);
         return;
       }
 
-      if (promo.minPurchase && totals.baseTotal < promo.minPurchase) {
+      // if (code === 'SAVE10' && quantity < 5) {
+      //   setPromoError(`Minimum purchase of $${promo.minPurchase} required`);
+      //   setIsApplyingPromo(false);
+      //   return;
+      // }else if(code === 'SAVE20' && quantity < 10){
+      //   setPromoError(`Minimum purchase of $${promo.minPurchase} required`);
+      //   setIsApplyingPromo(false);
+      //   return;
+      // }
+
+
+      if (promo.minPurchase && quantity < promo.minPurchase) {
         setPromoError(`Minimum purchase of $${promo.minPurchase} required`);
         setIsApplyingPromo(false);
         return;
@@ -450,8 +463,8 @@ export default function ProductDetailsPage() {
               <details className="text-xs text-gray-500">
                 <summary className="cursor-pointer hover:text-gray-700">Available codes</summary>
                 <div className="mt-2 space-y-1 pl-2">
-                  <p>• SAVE10 - 10% off on orders $50+</p>
-                  <p>• SAVE20 - 20% off on orders $100+</p>
+                  <p>• SAVE10 - 10% off on orders $5+</p>
+                  <p>• SAVE20 - 20% off on orders $10+</p>
                   <p>• WELCOME15 - 15% off for new customers</p>
                   <p>• FREESHIP - 5% off all orders</p>
                 </div>
