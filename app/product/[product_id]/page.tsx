@@ -38,7 +38,7 @@ export default function ProductDetailsPage() {
   const [productUrl, setProductUrl] = useState('');
 
   // Check if product is in wishlist
-  const productInWishlist = product ? isInWishlist(product?.id) : false;
+  const productInWishlist = product ? isInWishlist(product.id) : false;
 
   // Update URL when configuration changes (without page reload)
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function ProductDetailsPage() {
       if (urlSize && product?.variants?.sizes?.find(s => s.id === urlSize && s.available)) {
         setSelectedSize(urlSize);
       } else {
-        const firstAvailableSize = product?.variants?.size?s.find(s => s.available);
+        const firstAvailableSize = product?.variants?.sizes?.find(s => s.available);
         if (firstAvailableSize) setSelectedSize(firstAvailableSize?.id);
       }
 
@@ -114,11 +114,11 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     if (!product) return;
 
-    let price = product.basePrice;
-    const selectedMat = product.variants.materials.find(m => m.id === selectedMaterial);
+    let price = product?.basePrice;
+    const selectedMat = product?.variants?.materials.find(m => m.id === selectedMaterial);
     if (selectedMat?.priceModifier) price += selectedMat.priceModifier;
 
-    const selectedSz = product.variants.sizes.find(s => s.id === selectedSize);
+    const selectedSz = product?.variants?.sizes?.find(s => s.id === selectedSize);
     if (selectedSz?.priceModifier) price += selectedSz.priceModifier;
 
     setCurrentPrice(price);
@@ -126,8 +126,8 @@ export default function ProductDetailsPage() {
     const isIncompatible = false;
     setShowIncompatibleWarning(isIncompatible);
 
-    const colorVariant = product?.variants?.colors?.find(c => c.id === selectedColor);
-    const materialVariant = product?.variants?.materials?.find(m => m.id === selectedMaterial);
+    const colorVariant = product?.variants?.colors.find(c => c.id === selectedColor);
+    const materialVariant = product?.variants?.materials.find(m => m.id === selectedMaterial);
     const sizeVariant = product?.variants?.sizes?.find(s => s.id === selectedSize);
 
     if (!colorVariant?.available || !materialVariant?.available || !sizeVariant?.available) {
@@ -222,7 +222,7 @@ export default function ProductDetailsPage() {
           <div className="lg:sticky lg:top-8 lg:self-start">
             {/* Product Images with 3D Viewer as First Image */}
             <ProductImageGallery 
-              images={product.images} 
+              images={product?.images} 
               show3DViewer={true}
               productColor={product?.variants?.colors?.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
               productMaterial={selectedMaterial}
@@ -233,11 +233,11 @@ export default function ProductDetailsPage() {
 
           <div className="space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product?.name}</h1>
-              <ProductRating rating={product?.rating} reviewCount={product?.reviewCount} />
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product.name}</h1>
+              <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
             </div>
 
-            <p className="text-lg text-gray-600 leading-relaxed">{product?.description}</p>
+            <p className="text-lg text-gray-600 leading-relaxed">{product.description}</p>
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-3">
@@ -274,7 +274,7 @@ export default function ProductDetailsPage() {
                 />
               )}
 
-              {product?.variants?.materials?.length > 0 && (
+              {product.variants.materials.length > 0 && (
                 <VariantSelector
                   label="Material"
                   type="material"
@@ -327,7 +327,7 @@ export default function ProductDetailsPage() {
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <p className="text-xs text-gray-500">Total Price</p>
-            <p className="text-xl font-bold text-gray-900">${currentPrice?.toFixed(2)}</p>
+            <p className="text-xl font-bold text-gray-900">${currentPrice.toFixed(2)}</p>
           </div>
           <button
             onClick={handleAddToCart}
