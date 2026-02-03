@@ -83,10 +83,10 @@ export default function ProductDetailsPage() {
       const urlSize = searchParams.get('size');
 
       // Validate and set color from URL or use first available
-      if (urlColor && product.variants.colors.find(c => c.id === urlColor && c.available)) {
+      if (urlColor && product?.variants?.colors?.find(c => c.id === urlColor && c.available)) {
         setSelectedColor(urlColor);
       } else {
-        const firstAvailableColor = product.variants.colors.find(c => c.available);
+        const firstAvailableColor = product?.variants?.colors?.find(c => c.available);
         if (firstAvailableColor) setSelectedColor(firstAvailableColor.id);
       }
 
@@ -109,8 +109,8 @@ export default function ProductDetailsPage() {
       // setCurrentPrice(product.basePrice);
       setStockQuantity(product.stockQuantity);
       setStockStatus(
-        product.stockQuantity > 50 ? 'in-stock' :
-          product.stockQuantity > 0 ? 'low-stock' : 'out-of-stock'
+        product?.stockQuantity > 50 ? 'in-stock' :
+          product?.stockQuantity > 0 ? 'low-stock' : 'out-of-stock'
       );
     }
   }, [product, searchParams]);
@@ -119,11 +119,11 @@ export default function ProductDetailsPage() {
     if (!product) return;
 
     let price = product?.basePrice;
-    const selectedMat = product?.variants?.materials.find(m => m.id === selectedMaterial);
-    if (selectedMat?.priceModifier) price += selectedMat.priceModifier;
+    const selectedMat = product?.variants?.materials?.find(m => m.id === selectedMaterial);
+    if (selectedMat?.priceModifier) price += selectedMat?.priceModifier;
 
     const selectedSz = product?.variants?.sizes?.find(s => s.id === selectedSize);
-    if (selectedSz?.priceModifier) price += selectedSz.priceModifier;
+    if (selectedSz?.priceModifier) price += selectedSz?.priceModifier;
 
     setCurrentPrice(price);
 
@@ -186,7 +186,7 @@ export default function ProductDetailsPage() {
     const quantityDiscountAmount = baseTotal * quantityDiscount;
     const subtotalAfterQtyDiscount = baseTotal - quantityDiscountAmount;
     
-    const promoDiscount = appliedPromo ? appliedPromo.discount : 0;
+    const promoDiscount = appliedPromo ? appliedPromo?.discount : 0;
     const promoDiscountAmount = subtotalAfterQtyDiscount * promoDiscount;
     const finalTotal = subtotalAfterQtyDiscount - promoDiscountAmount;
 
@@ -231,8 +231,8 @@ export default function ProductDetailsPage() {
       // }
 
 
-      if (promo.minPurchase && quantity < promo.minPurchase) {
-        setPromoError(`Minimum purchase of $${promo.minPurchase} required`);
+      if (promo?.minPurchase && quantity < promo?.minPurchase) {
+        setPromoError(`Minimum purchase of $${promo?.minPurchase} required`);
         setIsApplyingPromo(false);
         return;
       }
@@ -320,11 +320,11 @@ export default function ProductDetailsPage() {
 
           <div className="space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product.name}</h1>
-              <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
+              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{product?.name}</h1>
+              <ProductRating rating={product?.rating} reviewCount={product?.reviewCount} />
             </div>
 
-            <p className="text-lg text-gray-600 leading-relaxed">{product.description}</p>
+            <p className="text-lg text-gray-600 leading-relaxed">{product?.description}</p>
 
             <div className="space-y-2">
               <div className="flex items-baseline gap-3">
@@ -394,10 +394,10 @@ export default function ProductDetailsPage() {
                     <span className="text-2xl">🎉</span>
                     <div>
                       <p className="font-semibold text-green-800">
-                        {(totals.quantityDiscount * 100).toFixed(0)}% Quantity Discount Applied!
+                        {(totals?.quantityDiscount * 100)?.toFixed(0)}% Quantity Discount Applied!
                       </p>
                       <p className="text-sm text-green-600">
-                        You save ${totals.quantityDiscountAmount.toFixed(2)}
+                        You save ${totals?.quantityDiscountAmount.toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -439,10 +439,10 @@ export default function ProductDetailsPage() {
                     <span className="text-2xl">✨</span>
                     <div>
                       <p className="font-semibold text-blue-800">
-                        {appliedPromo.code} Applied!
+                        {appliedPromo?.code} Applied!
                       </p>
                       <p className="text-sm text-blue-600">
-                        {(appliedPromo.discount * 100).toFixed(0)}% off - Save ${totals.promoDiscountAmount.toFixed(2)}
+                        {(appliedPromo?.discount * 100).toFixed(0)}% off - Save ${totals?.promoDiscountAmount.toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -479,25 +479,25 @@ export default function ProductDetailsPage() {
               </div>
               {totals.quantityDiscount > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
-                  <span>Quantity Discount ({(totals.quantityDiscount * 100).toFixed(0)}%)</span>
+                  <span>Quantity Discount ({(totals?.quantityDiscount * 100).toFixed(0)}%)</span>
                   <span>-${totals.quantityDiscountAmount.toFixed(2)}</span>
                 </div>
               )}
               {appliedPromo && (
                 <div className="flex justify-between text-sm text-blue-600">
-                  <span>Promo ({appliedPromo.code})</span>
-                  <span>-${totals.promoDiscountAmount.toFixed(2)}</span>
+                  <span>Promo ({appliedPromo?.code})</span>
+                  <span>-${totals?.promoDiscountAmount?.toFixed(2)}</span>
                 </div>
               )}
               {totals.totalSavings > 0 && (
                 <div className="flex justify-between text-sm font-semibold text-green-600 border-t border-gray-200 pt-2">
                   <span>Total Savings</span>
-                  <span>-${totals.totalSavings.toFixed(2)}</span>
+                  <span>-${totals?.totalSavings?.toFixed(2)}</span>
                 </div>
               )}
               <div className="flex justify-between text-lg font-bold text-gray-900 border-t border-gray-300 pt-2">
                 <span>Total</span>
-                <span>${totals.finalTotal.toFixed(2)}</span>
+                <span>${totals?.finalTotal?.toFixed(2)}</span>
               </div>
             </div>
 
@@ -530,9 +530,9 @@ export default function ProductDetailsPage() {
           <div className="flex-1">
             <p className="text-xs text-gray-500">Total Price</p>
             <div className="flex items-center gap-2">
-              <p className="text-xl font-bold text-gray-900">${totals.finalTotal.toFixed(2)}</p>
+              <p className="text-xl font-bold text-gray-900">${totals?.finalTotal?.toFixed(2)}</p>
               {totals.totalSavings > 0 && (
-                <span className="text-xs text-green-600 font-medium">Save ${totals.totalSavings.toFixed(2)}</span>
+                <span className="text-xs text-green-600 font-medium">Save ${totals?.totalSavings?.toFixed(2)}</span>
               )}
             </div>
           </div>
