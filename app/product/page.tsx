@@ -7,13 +7,14 @@ import { MOCK_PRODUCTS, sortProducts } from '@/app/data/products';
 import { Filter, Search, Star } from 'lucide-react';
 
 const ProductsPage = () => {
+    
     const [sortBy, setSortBy] = useState<SortOption>('featured');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
     const [minRating, setMinRating] = useState<number>(0);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-    const [showFilters, setShowFilters] = useState(true);
+    const [showFilters, setShowFilters] = useState(false);
     const [colorSearch, setColorSearch] = useState<string>('');
 
     // Get unique values for filters
