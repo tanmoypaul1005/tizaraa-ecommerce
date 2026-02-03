@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { ChevronLeft, ChevronRight, Maximize2, ZoomIn, RotateCw, X } from 'lucide-react';
@@ -8,7 +8,7 @@ import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 const Product3DViewer = dynamic(() => import('@/app/components/3d/Product3DViewer'), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800 animate-pulse rounded-2xl" />
+  loading: () => <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />
 });
 
 interface ProductImage {
@@ -21,12 +21,18 @@ interface ProductImage {
 interface ProductImageGalleryProps {
   images: ProductImage[];
   show3DViewer?: boolean;
+  productColor?: string;
+  productMaterial?: string;
+  productType?: 'tshirt' | 'watch' | 'phone-case' | 'mug' | 'hoodie' | 'bag' | 'default';
   productName?: string;
 }
 
-const ProductImageGallery: React.FC<ProductImageGalleryProps> = memo(({ 
+const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ 
   images, 
   show3DViewer = false,
+  productColor = '#3b82f6',
+  productMaterial = 'standard',
+  productType = 'default',
   productName = ''
 }) => {
   
@@ -43,57 +49,57 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = memo(({
   const is3DViewSelected = show3DViewer && selectedIndex === 0;
   const currentImageIndex = show3DViewer ? selectedIndex - 1 : selectedIndex;
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMousePosition({ x, y });
-  }, []);
+  };
 
-  const handleMouseEnter = useCallback(() => {
+  const handleMouseEnter = () => {
     if (!isOverControls) {
       setIsHovering(true);
     }
-  }, [isOverControls]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     setIsHovering(false);
-  }, []);
+  };
 
-  const handleControlsEnter = useCallback(() => {
+  const handleControlsEnter = () => {
     setIsOverControls(true);
     setIsHovering(false);
-  }, []);
+  };
 
-  const handleControlsLeave = useCallback(() => {
+  const handleControlsLeave = () => {
     setIsOverControls(false);
-  }, []);
+  };
 
-  const handlePrevious = useCallback(() => {
+  const handlePrevious = () => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
-  }, [totalItems]);
+  };
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
-  }, [totalItems]);
+  };
 
-  const handleZoom = useCallback(() => {
+  const handleZoom = () => {
     setZoom((prev) => (prev === 1 ? 2 : 1));
-  }, []);
+  };
 
-  const handleRotate = useCallback(() => {
+  const handleRotate = () => {
     setRotation((prev) => (prev + 90) % 360);
-  }, []);
+  };
 
-  const handleFullscreen = useCallback(() => {
+  const handleFullscreen = () => {
     setIsFullscreen(true);
-  }, []);
+  };
 
-  const closeFullscreen = useCallback(() => {
+  const closeFullscreen = () => {
     setIsFullscreen(false);
     setZoom(1);
     setRotation(0);
-  }, []);
+  };
 
   return (
     <div className="space-y-4">
@@ -109,6 +115,9 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = memo(({
           // 3D Model Viewer - Show first image in 3D
           <div className="absolute inset-0">
             <Product3DViewer
+              color={productColor}
+              material={productMaterial}
+              productType={productType}
               productName={productName}
               autoRotate={false}
               productImage={images[0]?.url}
@@ -317,8 +326,6 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = memo(({
       )}
     </div>
   );
-});
-
-ProductImageGallery.displayName = 'ProductImageGallery';
+};
 
 export default ProductImageGallery;

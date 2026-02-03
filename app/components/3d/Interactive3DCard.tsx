@@ -64,3 +64,4 @@ export default function Interactive3DCard({ icon, title, description }: Interact
     </div>
   );
 }
+
