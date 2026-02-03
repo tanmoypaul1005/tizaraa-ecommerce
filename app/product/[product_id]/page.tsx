@@ -119,6 +119,10 @@ export default function ProductDetailsPage() {
     if (!product) return;
 
     let price = product?.basePrice;
+    
+    const selectedCol = product?.variants?.colors?.find(c => c.id === selectedColor);
+    if (selectedCol?.priceModifier) price += selectedCol?.priceModifier;
+    
     const selectedMat = product?.variants?.materials?.find(m => m.id === selectedMaterial);
     if (selectedMat?.priceModifier) price += selectedMat?.priceModifier;
 
