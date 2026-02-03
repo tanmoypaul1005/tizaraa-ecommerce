@@ -519,7 +519,7 @@ export const MOCK_PRODUCTS: Product[] = [
         { id: 'silver', name: 'Stainless Steel', value: 'silver', hex: '#C0C0C0', available: true,priceModifier: 20 },
         { id: 'rose', name: 'Rose Gold', value: 'rose', hex: '#B76E79', available: true,priceModifier: 25 },
         { id: 'blue', name: 'Navy Blue', value: 'blue', hex: '#1E3A8A', available: true,priceModifier: 35 },
-        { id: 'mint', name: 'Mint Green', value: 'mint', hex: '#6EE7B7', available: ,40 },
+        { id: 'mint', name: 'Mint Green', value: 'mint', hex: '#6EE7B7', available: true, priceModifier: 40 },
       ],
       materials: [
         { id: 'steel', name: 'Stainless Steel', value: 'steel', available: true, priceModifier: 0 },
@@ -602,8 +602,8 @@ export const MOCK_PRODUCTS: Product[] = [
     variants: {
       colors: [
         { id: 'c16-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
-        { id: 'c16-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF',30 },
-        { id: 'c16-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0',56 },
+        { id: 'c16-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF',priceModifier: 30 },
+        { id: 'c16-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0',priceModifier: 56 },
       ],
       materials: [
         { id: 'm16-1', name: 'Standard', value: 'ABS Plastic', available: true },
