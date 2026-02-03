@@ -1,5 +1,4 @@
 import ProductCard from "./components/ProductCard";
-import RecentlyViewed from "./components/RecentlyViewed";
 import { getFeaturedProducts } from "./data/products";
 import { Suspense } from "react";
 import { ProductListSkeleton } from "./components/Skeletons";
@@ -7,6 +6,7 @@ import HeroSection from "./components/home/HeroSection";
 import FeaturesSection from "./components/home/FeaturesSection";
 import CTASection from "./components/home/CTASection";
 import ProductsPage from "./product/page";
+import RecentlyViewed from "./components/RecentlyViewed";
 
 // Async component for featured products
 async function FeaturedProductsGrid() {

@@ -62,8 +62,8 @@ export const MOCK_PRODUCTS: Product[] = [
     inStock: true,
     stockQuantity: 78,
     images: [
+      { id: '1', url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop', alt: 'Hoodie front', type: 'image' },
       { id: '1', url: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&h=800&fit=crop', alt: 'Hoodie back', type: 'image' },
-      { id: '2', url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop', alt: 'Hoodie front', type: 'image' },
       { id: '3', url: 'https://images.unsplash.com/photo-1620799139834-6b8f844fbe61?w=800&h=800&fit=crop', alt: 'Hoodie detail', type: 'image' },
     ],
     variants: {
@@ -141,8 +141,8 @@ export const MOCK_PRODUCTS: Product[] = [
     inStock: true,
     stockQuantity: 145,
     images: [
-      { id: '1', url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop', alt: 'Baseball cap', type: 'image' },
-      { id: '2', url: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=800&h=800&fit=crop', alt: 'Cap side view', type: 'image' },
+      { id: '1', url: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=800&h=800&fit=crop', alt: 'Cap side view', type: 'image' },
+      { id: '2', url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop', alt: 'Baseball cap', type: 'image' },
     ],
     variants: {
       colors: [
@@ -381,9 +381,9 @@ export const MOCK_PRODUCTS: Product[] = [
     inStock: true,
     stockQuantity: 215,
     images: [
-      { id: '1', url: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop', alt: 'Coffee mug set', type: 'image' },
-      { id: '2', url: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=800&h=800&fit=crop', alt: 'Mug detail', type: 'image' },
-      { id: '3', url: 'https://images.unsplash.com/photo-1610889556528-9a770e32642f?w=800&h=800&fit=crop', alt: 'Mug in use', type: 'image' },
+      { id: '1', url: 'https://images.unsplash.com/photo-1610889556528-9a770e32642f?w=800&h=800&fit=crop', alt: 'Mug in use', type: 'image' },
+      { id: '2', url: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop', alt: 'Coffee mug set', type: 'image' },
+      { id: '3', url: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=800&h=800&fit=crop', alt: 'Mug detail', type: 'image' },
     ],
     variants: {
       colors: [

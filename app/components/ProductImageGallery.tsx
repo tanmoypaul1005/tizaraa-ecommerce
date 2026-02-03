@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { ChevronLeft, ChevronRight, Maximize2, ZoomIn, RotateCw, X } from 'lucide-react';
@@ -8,7 +8,7 @@ import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
 const Product3DViewer = dynamic(() => import('@/app/components/3d/Product3DViewer'), {
   ssr: false,
-  loading: () => <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />
+  loading: () => <div className="w-full h-full bg-gradient-to-br from-slate-900 to-slate-800 animate-pulse rounded-2xl" />
 });
 
 interface ProductImage {
@@ -24,7 +24,7 @@ interface ProductImageGalleryProps {
   productName?: string;
 }
 
-const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ 
+const ProductImageGallery: React.FC<ProductImageGalleryProps> = memo(({ 
   images, 
   show3DViewer = false,
   productName = ''
@@ -43,57 +43,57 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   const is3DViewSelected = show3DViewer && selectedIndex === 0;
   const currentImageIndex = show3DViewer ? selectedIndex - 1 : selectedIndex;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMousePosition({ x, y });
-  };
+  }, []);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     if (!isOverControls) {
       setIsHovering(true);
     }
-  };
+  }, [isOverControls]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     setIsHovering(false);
-  };
+  }, []);
 
-  const handleControlsEnter = () => {
+  const handleControlsEnter = useCallback(() => {
     setIsOverControls(true);
     setIsHovering(false);
-  };
+  }, []);
 
-  const handleControlsLeave = () => {
+  const handleControlsLeave = useCallback(() => {
     setIsOverControls(false);
-  };
+  }, []);
 
-  const handlePrevious = () => {
+  const handlePrevious = useCallback(() => {
     setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
-  };
+  }, [totalItems]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
-  };
+  }, [totalItems]);
 
-  const handleZoom = () => {
+  const handleZoom = useCallback(() => {
     setZoom((prev) => (prev === 1 ? 2 : 1));
-  };
+  }, []);
 
-  const handleRotate = () => {
+  const handleRotate = useCallback(() => {
     setRotation((prev) => (prev + 90) % 360);
-  };
+  }, []);
 
-  const handleFullscreen = () => {
+  const handleFullscreen = useCallback(() => {
     setIsFullscreen(true);
-  };
+  }, []);
 
-  const closeFullscreen = () => {
+  const closeFullscreen = useCallback(() => {
     setIsFullscreen(false);
     setZoom(1);
     setRotation(0);
-  };
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -317,6 +317,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       )}
     </div>
   );
-};
+});
+
+ProductImageGallery.displayName = 'ProductImageGallery';
 
 export default ProductImageGallery;
