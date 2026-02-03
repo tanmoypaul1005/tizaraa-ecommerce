@@ -1,10 +1,106 @@
 # Tizaraa E-Commerce Platform
 
-A modern, feature-rich e-commerce platform built with Next.js 16, featuring PWA capabilities, persistent cart system, and customizable products.
+A modern, feature-rich e-commerce platform built with Next.js 16, featuring PWA capabilities, 3D product viewer, persistent cart system, and customizable products.
+
+## 📋 Table of Contents
+- [Features](#-features-implemented)
+- [Quick Start](#-quick-start)
+- [Setup Instructions](#-setup-instructions)
+- [Project Structure](#-project-structure)
+- [Technologies Used](#-technologies-used)
+- [Available Scripts](#-available-scripts)
+- [Environment Setup](#-environment-setup)
+
+## ⚡ Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/tanmoypaul1005/tizaraa-ecommerce.git
+cd tizaraa-ecommerce
+
+# 2. Install dependencies
+npm install
+
+# 3. Run development server
+npm run dev
+
+# 4. Open browser
+# Navigate to http://localhost:3000
+```
+
+## 🛠️ Setup Instructions
+
+### Prerequisites
+- **Node.js** 18.17 or later
+- **npm** or **yarn** or **pnpm**
+- Modern web browser (Chrome, Firefox, Edge, Safari)
+
+### Installation Steps
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+2. **Install 3D Libraries** (if not already installed)
+   ```bash
+   npm install three @react-three/fiber @react-three/drei
+   npm install --save-dev @types/three
+   ```
+
+3. **Development Server**
+   ```bash
+   npm run dev
+   ```
+   Server runs at `http://localhost:3000`
+
+4. **Production Build**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+5. **PWA Testing**
+   - Build the project: `npm run build`
+   - Serve production build: `npm start`
+   - Open in browser and use DevTools → Application → Service Workers
+
+### Troubleshooting
+
+**Build Errors:**
+```bash
+# Clear Next.js cache
+rm -rf .next
+npm run build
+```
+
+**3D Model Issues:**
+```bash
+# Reinstall 3D dependencies
+npm install --force three @react-three/fiber @react-three/drei
+```
+
+**PWA Not Working:**
+- Ensure you're on HTTPS or localhost
+- Check Service Worker registration in DevTools
+- Clear browser cache and reload
 
 ## 🚀 Features Implemented
 
-### 1. Persistent Shopping Cart System
+### 1. 3D Product Viewer
+- ✅ **Interactive 3D Display** - Rotate and zoom product images in 3D
+- ✅ **Realistic Rendering** - Enhanced lighting with shadows and reflections
+- ✅ **Texture Mapping** - High-quality product image textures
+- ✅ **Smooth Controls** - Mouse drag to rotate, scroll to zoom
+- ✅ **Auto-rotate** - Elegant automatic rotation
+- ✅ **First Image 3D** - Replaces first thumbnail with interactive 3D view
+- ✅ **Mobile Touch Support** - Touch gestures for mobile devices
+
+### 2. Persistent Shopping Cart System
 - ✅ **IndexedDB Storage** - Cart data persists across browser sessions
 - ✅ **Cross-Tab Synchronization** - Cart updates sync across multiple browser tabs using BroadcastChannel API
 - ✅ **Offline Support** - Cart works even when offline
@@ -163,6 +259,69 @@ public/
 - calculateTotals()              # Recalculate prices
 ```
 
+## 📋 Available Scripts
+
+```bash
+# Development
+npm run dev          # Start development server with Turbopack
+npm run dev:debug    # Start with debugging enabled
+
+# Production
+npm run build        # Build for production
+npm start            # Start production server
+npm run build:analyze # Build with bundle analysis
+
+# Code Quality
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors
+npm run type-check   # Run TypeScript compiler check
+
+# Testing
+npm test             # Run tests (if configured)
+```
+
+## 🌍 Environment Setup
+
+### Required Environment Variables
+Create a `.env.local` file in the root directory:
+
+```env
+# App Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=Tizaraa
+
+# Optional: Analytics, Payment Gateway, etc.
+# NEXT_PUBLIC_ANALYTICS_ID=your-analytics-id
+# STRIPE_PUBLIC_KEY=your-stripe-key
+```
+
+### Build Configuration
+The project uses Next.js 16 with:
+- **Turbopack** - Fast bundler for development
+- **TypeScript** - Strict mode enabled
+- **Tailwind CSS** - JIT mode
+- **PWA** - Configured via next-pwa
+
+## 📱 PWA Configuration
+
+### Manifest Settings
+Located in `public/manifest.json`:
+- App name, icons, theme colors
+- Display mode: standalone
+- Orientation: portrait
+- Screenshots for app stores
+
+### Service Worker
+Located in `public/sw.js`:
+- Cache-first strategy for static assets
+- Network-first for API calls
+- Offline fallback page
+
+### Installing PWA
+1. Open the app in Chrome/Edge
+2. Click install icon in address bar
+3. Or use menu → Install Tizaraa
+
 ## 🎯 Key Implementation Details
 
 ### IndexedDB Structure
@@ -215,6 +374,63 @@ public/
 5. Other tabs receive message
 6. Other tabs reload from IndexedDB
 7. All tabs synchronized
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+
+# Production deployment
+vercel --prod
+```
+
+### Manual Deployment
+```bash
+# Build the project
+npm run build
+
+# Deploy the .next folder to your hosting provider
+# Ensure Node.js 18+ is installed on the server
+```
+
+### Environment Variables for Production
+Set these in your hosting platform:
+- `NEXT_PUBLIC_APP_URL` - Your production domain
+- Any other API keys or secrets
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👨‍💻 Author
+
+**Tanmoy Paul**
+- GitHub: [@tanmoypaul1005](https://github.com/tanmoypaul1005)
+- Repository: [tizaraa-ecommerce](https://github.com/tanmoypaul1005/tizaraa-ecommerce)
+
+## 🙏 Acknowledgments
+
+- Next.js team for the amazing framework
+- React Three Fiber for 3D capabilities
+- Unsplash for product images
+- All open-source contributors
+
+---
+
+**Need Help?** Open an issue on GitHub or check the documentation.
 
 ## 📱 PWA Features
 

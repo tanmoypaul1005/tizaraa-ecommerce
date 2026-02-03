@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, Star, ArrowLeftRight, Check } from 'lucide-react';
@@ -23,7 +23,7 @@ interface ProductCardProps {
   fullProduct?: any;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard: React.FC<ProductCardProps> = memo(({
   id,
   name,
   shortDescription,
@@ -178,6 +178,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
     </Link>
   );
-};
+});
+
+ProductCard.displayName = 'ProductCard';
 
 export default ProductCard;
