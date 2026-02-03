@@ -220,7 +220,15 @@ export default function ProductDetailsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <ProductImageGallery images={product.images} />
+            {/* Product Images with 3D Viewer as First Image */}
+            <ProductImageGallery 
+              images={product.images} 
+              show3DViewer={true}
+              productColor={product?.variants?.colors.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
+              productMaterial={selectedMaterial}
+              productType={product.model3D || 'default'}
+              productName={product.name}
+            />
           </div>
 
           <div className="space-y-6">
