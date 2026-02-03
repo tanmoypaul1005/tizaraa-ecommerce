@@ -1,18 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useCartStore } from '../store/cartStore';
-import { Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Clock, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
+import type { RecentlyViewedItem } from '@/app/types';
 
-const RecentlyViewed = () => {
+const RecentlyViewed: React.FC = () => {
   const { recentlyViewed } = useCartStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: 'left' | 'right'): void => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
       scrollContainerRef.current.scrollBy({
@@ -22,7 +24,11 @@ const RecentlyViewed = () => {
     }
   };
 
-  if (recentlyViewed.length === 0) {
+  const handleImageError = (productId: string): void => {
+    setImageErrors(prev => new Set(prev).add(productId));
+  };
+
+  if (!recentlyViewed || recentlyViewed.length === 0) {
     return null;
   }
 
@@ -67,7 +73,10 @@ const RecentlyViewed = () => {
           className="flex gap-3 sm:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {recentlyViewed.map((item) => (
+          {recentlyViewed.map((item: RecentlyViewedItem) => {
+            const hasImageError = imageErrors.has(item.productId);
+            
+            return (
             <Link
               key={item.productId}
               href={`/product/${item.productId}`}
@@ -76,30 +85,38 @@ const RecentlyViewed = () => {
               <div className="bg-white border border-gray-200 rounded-lg sm:rounded-xl overflow-hidden hover:shadow-lg hover:border-blue-300 transition-all duration-300 h-full flex flex-col">
                 {/* Image */}
                 <div className="relative aspect-square overflow-hidden bg-gray-100 flex-shrink-0">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 475px) 144px, (max-width: 640px) 160px, (max-width: 768px) 192px, (max-width: 1024px) 208px, 224px"
-                    className="object-cover group-hover:scale-110 transition-transform duration-300"
-                    placeholder="blur"
-                    blurDataURL={shimmerBlurDataUrl}
-                    quality={75}
-                  />
+                  {hasImageError ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <AlertTriangle className="w-8 h-8 text-gray-400" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={item.image || '/placeholder.png'}
+                      alt={item.name || 'Product'}
+                      fill
+                      sizes="(max-width: 475px) 144px, (max-width: 640px) 160px, (max-width: 768px) 192px, (max-width: 1024px) 208px, 224px"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      placeholder="blur"
+                      blurDataURL={shimmerBlurDataUrl}
+                      quality={75}
+                      onError={() => handleImageError(item.productId)}
+                    />
+                  )}
                 </div>
 
                 {/* Content */}
                 <div className="p-2.5 sm:p-3 lg:p-4 flex flex-col flex-grow">
                   <h3 className="font-semibold text-gray-900 text-xs sm:text-sm lg:text-base mb-1 sm:mb-1.5 line-clamp-2 group-hover:text-blue-600 transition-colors flex-grow">
-                    {item.name}
+                    {item.name || 'Unknown Product'}
                   </h3>
                   <p className="text-base sm:text-lg lg:text-xl font-bold text-gray-900">
-                    ${item.price.toFixed(2)}
+                    ${(item.price || 0).toFixed(2)}
                   </p>
                 </div>
               </div>
             </Link>
-          ))}
+          );
+          })}
         </div>
 
         {/* Mobile scroll indicator */}
