@@ -1,7 +1,7 @@
 'use client';
 
-import React, { Suspense, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { Suspense, useRef, useState } from 'react';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -11,6 +11,7 @@ interface Product3DViewerProps {
   productType?: 'tshirt' | 'watch' | 'phone-case' | 'mug' | 'hoodie' | 'bag' | 'default';
   autoRotate?: boolean;
   productName?: string;
+  productImage?: string;
 }
 
 // T-Shirt Model
@@ -165,8 +166,57 @@ function BagModel({ color, materialProps }: { color: string; materialProps: any 
   );
 }
 
+// Product Image as 3D Rotating Card
+function ProductImageCard({ imageUrl }: { imageUrl: string }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+
+  // Load texture
+  React.useEffect(() => {
+    if (imageUrl) {
+      const loader = new THREE.TextureLoader();
+      loader.load(
+        imageUrl,
+        (loadedTexture) => {
+          setTexture(loadedTexture);
+        },
+        undefined,
+        (error) => {
+          console.error('Error loading texture:', error);
+        }
+      );
+    }
+  }, [imageUrl]);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.005;
+    }
+  });
+
+  if (!texture) {
+    return (
+      <RoundedBox args={[3, 3, 0.1]} radius={0.1} smoothness={4}>
+        <meshStandardMaterial color="#e5e7eb" />
+      </RoundedBox>
+    );
+  }
+
+  return (
+    <mesh ref={meshRef} castShadow receiveShadow>
+      <planeGeometry args={[3, 3]} />
+      <meshStandardMaterial 
+        map={texture} 
+        side={THREE.DoubleSide}
+        roughness={0.3}
+        metalness={0.1}
+      />
+    </mesh>
+  );
+}
+
 // 3D Product Model Component
-function ProductModel({ color = '#3b82f6', material = 'standard', productType = 'default', productName = '' }: Product3DViewerProps) {
+function ProductModel({ color = '#3b82f6', material = 'standard', productType = 'default', productName = '', productImage }: Product3DViewerProps) {
   const meshRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
@@ -191,6 +241,11 @@ function ProductModel({ color = '#3b82f6', material = 'standard', productType = 
     else if (nameLower.includes('mug') || nameLower.includes('cup') || nameLower.includes('bottle') || nameLower.includes('tumbler')) detectedType = 'mug';
     else if (nameLower.includes('hoodie') || nameLower.includes('sweatshirt')) detectedType = 'hoodie';
     else if (nameLower.includes('bag') || nameLower.includes('backpack') || nameLower.includes('tote')) detectedType = 'bag';
+  }
+
+  // If product image is provided, show rotating image card instead of 3D model
+  if (productImage) {
+    return <ProductImageCard imageUrl={productImage} />;
   }
 
   return (
@@ -226,6 +281,7 @@ export default function Product3DViewer({
   productType = 'default',
   autoRotate = true,
   productName = '',
+  productImage,
 }: Product3DViewerProps) {
   return (
     <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 relative">
@@ -251,6 +307,7 @@ export default function Product3DViewer({
             material={material} 
             productType={productType}
             productName={productName}
+            productImage={productImage}
           />
           <Environment preset="city" />
         </Suspense>
@@ -273,13 +330,6 @@ export default function Product3DViewer({
           maxPolarAngle={Math.PI / 1.5}
         />
       </Canvas>
-      
-      {/* Product Label */}
-      {productName && (
-        <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-sm font-medium">
-          {productName}
-        </div>
-      )}
     </div>
   );
 }

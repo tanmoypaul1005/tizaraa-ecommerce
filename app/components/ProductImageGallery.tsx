@@ -112,7 +112,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
         onMouseLeave={!is3DViewSelected ? handleMouseLeave : undefined}
       >
         {is3DViewSelected ? (
-          // 3D Model Viewer
+          // 3D Model Viewer - Show first image in 3D
           <div className="absolute inset-0">
             <Product3DViewer
               color={productColor}
@@ -120,6 +120,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
               productType={productType}
               productName={productName}
               autoRotate={false}
+              productImage={images[0]?.url}
             />
             <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
               🎨 3D Interactive View
