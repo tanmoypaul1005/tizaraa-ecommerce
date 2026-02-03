@@ -1,5 +1,4 @@
 'use client';
-
 import React, { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -119,7 +118,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({
         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
           <Link
             href={`/product/${id}`}
-            className="w-full bg-white hover:bg-blue-600 text-gray-900 hover:text-white font-semibold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg"
+            className="w-full bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg"
           >
             <ShoppingCart className="w-4 h-4" />
             <span className="text-sm">Quick View</span>
