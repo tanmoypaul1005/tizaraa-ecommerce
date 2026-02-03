@@ -11,6 +11,7 @@ import CrossTabSyncIndicator from "./components/CrossTabSyncIndicator";
 import ServerSyncIndicator from "./components/ServerSyncIndicator";
 import { CartDrawer } from "./components/CartDrawer";
 import ComparisonDrawer from "./components/ComparisonDrawer";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,17 +80,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ServiceWorkerRegister />
-        <OnlineStatus />
-        <UpdateNotification />
-        <CrossTabSyncIndicator />
-        <ServerSyncIndicator />
-        <Navbar/>
-        {children}
-        <Footer />
-        <PWAInstallPrompt />
-        <CartDrawer />
-        <ComparisonDrawer />
+        <ErrorBoundary>
+          <ServiceWorkerRegister />
+          <OnlineStatus />
+          <UpdateNotification />
+          <CrossTabSyncIndicator />
+          <ServerSyncIndicator />
+          <Navbar/>
+          {children}
+          <Footer />
+          <PWAInstallPrompt />
+          <CartDrawer/>
+          <ComparisonDrawer/>
+        </ErrorBoundary>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, TrendingUp } from 'lucide-react';
+import { Search, X, TrendingUp, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { useDebounce } from 'use-debounce';
 import { MOCK_PRODUCTS, Product } from '@/app/data/products';
@@ -10,11 +10,13 @@ interface SearchResult extends Product {
   matchType: 'name' | 'description' | 'category' | 'tag';
 }
 
-const SearchBar = () => {
-  const [query, setQuery] = useState('');
+const SearchBar: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Debounce search query to avoid excessive searches while typing
@@ -22,9 +24,15 @@ const SearchBar = () => {
 
   // Load recent searches from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('recentSearches');
-    if (saved) {
-      setRecentSearches(JSON.parse(saved));
+    try {
+      const saved = localStorage.getItem('recentSearches');
+      if (saved) {
+        const parsed = JSON.parse(saved) as string[];
+        setRecentSearches(Array.isArray(parsed) ? parsed : []);
+      }
+    } catch (err) {
+      console.error('Error loading recent searches:', err);
+      setRecentSearches([]);
     }
   }, []);
 
@@ -44,32 +52,49 @@ const SearchBar = () => {
   useEffect(() => {
     if (debouncedQuery.trim().length < 2) {
       setResults([]);
+      setIsLoading(false);
+      setError(null);
       return;
     }
 
-    const searchTerm = debouncedQuery.toLowerCase().trim();
-    const foundProducts: SearchResult[] = [];
+    setIsLoading(true);
+    setError(null);
 
-    MOCK_PRODUCTS.forEach((product) => {
-      // Check name match
-      if (product.name.toLowerCase().includes(searchTerm)) {
-        foundProducts.push({ ...product, matchType: 'name' });
-      }
-      // Check description match
-      else if (product.description.toLowerCase().includes(searchTerm)) {
-        foundProducts.push({ ...product, matchType: 'description' });
-      }
-      // Check category match
-      else if (product.category.toLowerCase().includes(searchTerm)) {
-        foundProducts.push({ ...product, matchType: 'category' });
-      }
-      // Check tags match
-      else if (product.tags.some(tag => tag.toLowerCase().includes(searchTerm))) {
-        foundProducts.push({ ...product, matchType: 'tag' });
-      }
-    });
+    try {
+      const searchTerm = debouncedQuery.toLowerCase().trim();
+      const foundProducts: SearchResult[] = [];
 
-    setResults(foundProducts.slice(0, 5)); // Limit to 5 results
+      MOCK_PRODUCTS.forEach((product) => {
+        try {
+          // Check name match
+          if (product.name?.toLowerCase().includes(searchTerm)) {
+            foundProducts.push({ ...product, matchType: 'name' });
+          }
+          // Check description match
+          else if (product.description?.toLowerCase().includes(searchTerm)) {
+            foundProducts.push({ ...product, matchType: 'description' });
+          }
+          // Check category match
+          else if (product.category?.toLowerCase().includes(searchTerm)) {
+            foundProducts.push({ ...product, matchType: 'category' });
+          }
+          // Check tags match
+          else if (product.tags?.some(tag => tag?.toLowerCase().includes(searchTerm))) {
+            foundProducts.push({ ...product, matchType: 'tag' });
+          }
+        } catch (err) {
+          console.error('Error processing product:', product.id, err);
+        }
+      });
+
+      setResults(foundProducts.slice(0, 5)); // Limit to 5 results
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Search error:', err);
+      setError('An error occurred while searching. Please try again.');
+      setResults([]);
+      setIsLoading(false);
+    }
   }, [debouncedQuery]);
 
   const highlightText = (text: string, query: string) => {
@@ -87,25 +112,31 @@ const SearchBar = () => {
     );
   };
 
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = (searchQuery: string): void => {
     if (searchQuery.trim().length < 2) return;
 
-    // Save to recent searches
-    const updated = [
-      searchQuery,
-      ...recentSearches.filter(s => s !== searchQuery),
-    ].slice(0, 5);
-    
-    setRecentSearches(updated);
-    localStorage.setItem('recentSearches', JSON.stringify(updated));
+    try {
+      // Save to recent searches
+      const updated = [
+        searchQuery,
+        ...recentSearches.filter(s => s !== searchQuery),
+      ].slice(0, 5);
+      
+      setRecentSearches(updated);
+      localStorage.setItem('recentSearches', JSON.stringify(updated));
+    } catch (err) {
+      console.error('Error saving recent search:', err);
+    }
   };
 
-  const handleClear = () => {
+  const handleClear = (): void => {
     setQuery('');
     setResults([]);
+    setError(null);
+    setIsLoading(false);
   };
 
-  const handleResultClick = (product: Product) => {
+  const handleResultClick = (product: Product): void => {
     handleSearch(query);
     setIsOpen(false);
     setQuery('');
@@ -142,9 +173,42 @@ const SearchBar = () => {
       {/* Search Results Dropdown */}
       {isOpen && (
         <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50">
-          {/* Results */}
-          {query.trim().length >= 2 ? (
-            results.length > 0 ? (
+          {/* Error State */}
+          {error ? (
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                <AlertTriangle className="w-8 h-8 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Search Error
+              </h3>
+              <p className="text-red-600 text-sm mb-4">{error}</p>
+              <button
+                onClick={() => {
+                  setError(null);
+                  setQuery('');
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Try Again
+              </button>
+            </div>
+          ) : query.trim().length >= 2 ? (
+            <>
+              {/* Loading State */}
+              {isLoading ? (
+                <div className="p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Search className="w-8 h-8 text-blue-600 animate-pulse" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Searching...
+                  </h3>
+                  <p className="text-gray-500">
+                    Finding products for "{query}"
+                  </p>
+                </div>
+              ) : results.length > 0 ? (
               <div className="max-h-[400px] overflow-y-auto">
                 <div className="p-2 border-b border-gray-100">
                   <p className="text-xs text-gray-500 font-medium px-3 py-1">
@@ -159,23 +223,27 @@ const SearchBar = () => {
                     className="flex items-center gap-4 p-3 hover:bg-gray-50 transition-colors"
                   >
                     <img
-                      src={product.images[0].url}
-                      alt={product.name}
+                      src={product.images?.[0]?.url || '/placeholder.png'}
+                      alt={product.name || 'Product'}
                       className="w-16 h-16 object-cover rounded-lg"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.png';
+                      }}
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-gray-900 truncate">
-                        {highlightText(product.name, query)}
+                        {highlightText(product.name || '', query)}
                       </h4>
                       <p className="text-sm text-gray-500 truncate">
                         {product.matchType === 'name' 
-                          ? highlightText(product.shortDescription, query)
-                          : highlightText(product.category, query)
+                          ? highlightText(product.shortDescription || '', query)
+                          : highlightText(product.category || '', query)
                         }
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="font-bold text-gray-900">
-                          ${product.basePrice.toFixed(2)}
+                          ${product.basePrice?.toFixed(2) || '0.00'}
                         </span>
                         {product.compareAtPrice && (
                           <span className="text-sm text-gray-400 line-through">
@@ -220,7 +288,8 @@ const SearchBar = () => {
                   </div>
                 </div>
               </div>
-            )
+            )}
+          </>
           ) : (
             // Recent & Popular Searches
             <div className="p-4">
