@@ -21,18 +21,12 @@ interface ProductImage {
 interface ProductImageGalleryProps {
   images: ProductImage[];
   show3DViewer?: boolean;
-  productColor?: string;
-  productMaterial?: string;
-  productType?: 'tshirt' | 'watch' | 'phone-case' | 'mug' | 'hoodie' | 'bag' | 'default';
   productName?: string;
 }
 
 const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ 
   images, 
   show3DViewer = false,
-  productColor = '#3b82f6',
-  productMaterial = 'standard',
-  productType = 'default',
   productName = ''
 }) => {
   
@@ -115,9 +109,6 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
           // 3D Model Viewer - Show first image in 3D
           <div className="absolute inset-0">
             <Product3DViewer
-              color={productColor}
-              material={productMaterial}
-              productType={productType}
               productName={productName}
               autoRotate={false}
               productImage={images[0]?.url}

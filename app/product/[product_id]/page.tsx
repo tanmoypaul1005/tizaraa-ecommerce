@@ -224,9 +224,6 @@ export default function ProductDetailsPage() {
             <ProductImageGallery 
               images={product?.images} 
               show3DViewer={true}
-              productColor={product?.variants?.colors?.find(c => c?.id === selectedColor)?.hex || '#3b82f6'}
-              productMaterial={selectedMaterial}
-              productType={product?.model3D || 'default'}
               productName={product?.name}
             />
           </div>
