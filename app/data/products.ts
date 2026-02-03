@@ -17,6 +17,7 @@ export interface Product {
   specifications: Specification[];
   createdAt?: string;
   popularity?: number;
+  model3D?: 'tshirt' | 'watch' | 'phone-case' | 'mug' | 'hoodie' | 'bag' | 'default';
 }
 
 export interface ProductImage {

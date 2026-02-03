@@ -2,8 +2,14 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { ChevronLeft, ChevronRight, Maximize2, ZoomIn, RotateCw, X } from 'lucide-react';
 import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
+
+const Product3DViewer = dynamic(() => import('@/app/components/3d/Product3DViewer'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />
+});
 
 interface ProductImage {
   id: string;
@@ -14,9 +20,21 @@ interface ProductImage {
 
 interface ProductImageGalleryProps {
   images: ProductImage[];
+  show3DViewer?: boolean;
+  productColor?: string;
+  productMaterial?: string;
+  productType?: 'tshirt' | 'watch' | 'phone-case' | 'mug' | 'hoodie' | 'bag' | 'default';
+  productName?: string;
 }
 
-const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => {
+const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ 
+  images, 
+  show3DViewer = false,
+  productColor = '#3b82f6',
+  productMaterial = 'standard',
+  productType = 'default',
+  productName = ''
+}) => {
   
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -25,6 +43,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
   const [isHovering, setIsHovering] = useState(false);
   const [isOverControls, setIsOverControls] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Calculate total items (3D viewer + images)
+  const totalItems = show3DViewer ? images.length + 1 : images.length;
+  const is3DViewSelected = show3DViewer && selectedIndex === 0;
+  const currentImageIndex = show3DViewer ? selectedIndex - 1 : selectedIndex;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -53,11 +76,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
   };
 
   const handlePrevious = () => {
-    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+    setSelectedIndex((prev) => (prev > 0 ? prev - 1 : totalItems - 1));
   };
 
   const handleNext = () => {
-    setSelectedIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+    setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : 0));
   };
 
   const handleZoom = () => {
@@ -80,33 +103,51 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
 
   return (
     <div className="space-y-4">
-      {/* Main Image Display */}
+      {/* Main Display - 3D or Image */}
       <div 
-        className="relative bg-gray-50 rounded-2xl overflow-hidden aspect-square group cursor-crosshair"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="relative bg-gray-50 rounded-2xl overflow-hidden aspect-square group"
+        style={{ cursor: is3DViewSelected ? 'grab' : 'crosshair' }}
+        onMouseMove={!is3DViewSelected ? handleMouseMove : undefined}
+        onMouseEnter={!is3DViewSelected ? handleMouseEnter : undefined}
+        onMouseLeave={!is3DViewSelected ? handleMouseLeave : undefined}
       >
-        <div className="absolute inset-0 flex items-center justify-center p-8">
-          <Image
-            src={images[selectedIndex]?.url || '/api/placeholder/800/800'}
-            alt={images[selectedIndex]?.alt || 'Product'}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
-            className="max-w-full max-h-full object-contain transition-all duration-200"
-            style={{ 
-              transform: `scale(${isHovering && !isOverControls ? 2 : zoom}) rotate(${rotation}deg)`,
-              transformOrigin: isHovering && !isOverControls ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
-            }}
-            priority={selectedIndex === 0}
-            placeholder="blur"
-            blurDataURL={shimmerBlurDataUrl}
-            quality={85}
-          />
-        </div>
+        {is3DViewSelected ? (
+          // 3D Model Viewer
+          <div className="absolute inset-0">
+            <Product3DViewer
+              color={productColor}
+              material={productMaterial}
+              productType={productType}
+              productName={productName}
+              autoRotate={false}
+            />
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
+              🎨 3D Interactive View
+            </div>
+          </div>
+        ) : (
+          // Product Image
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <Image
+              src={images[currentImageIndex]?.url || '/api/placeholder/800/800'}
+              alt={images[currentImageIndex]?.alt || 'Product'}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+              className="max-w-full max-h-full object-contain transition-all duration-200"
+              style={{ 
+                transform: `scale(${isHovering && !isOverControls ? 2 : zoom}) rotate(${rotation}deg)`,
+                transformOrigin: isHovering && !isOverControls ? `${mousePosition.x}% ${mousePosition.y}%` : 'center'
+              }}
+              priority={selectedIndex === 0}
+              placeholder="blur"
+              blurDataURL={shimmerBlurDataUrl}
+              quality={85}
+            />
+          </div>
+        )}
 
-        {/* Zoom Indicator */}
-        {isHovering && (
+        {/* Zoom Indicator - Only for images */}
+        {isHovering && !is3DViewSelected && (
           <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
             <ZoomIn className="w-3 h-3" />
             Zoomed 2x
@@ -114,7 +155,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
         )}
 
         {/* Navigation Arrows */}
-        {images?.length > 1 && (
+        {totalItems > 1 && (
           <>
             <button
               onClick={handlePrevious}
@@ -131,72 +172,97 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ images }) => 
           </>
         )}
 
-        {/* Control Buttons */}
-        <div 
-          className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          onMouseEnter={handleControlsEnter}
-          onMouseLeave={handleControlsLeave}
-        >
-          <button
-            onClick={handleZoom}
-            className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
-            title="Zoom"
+        {/* Control Buttons - Hide for 3D view */}
+        {!is3DViewSelected && (
+          <div 
+            className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+            onMouseEnter={handleControlsEnter}
+            onMouseLeave={handleControlsLeave}
           >
-            <ZoomIn className="w-5 h-5 text-gray-800" />
-          </button>
-          <button
-            onClick={handleRotate}
-            className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
-            title="Rotate"
-          >
-            <RotateCw className="w-5 h-5 text-gray-800" />
-          </button>
-          <button
-            onClick={handleFullscreen}
-            className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
-            title="Fullscreen"
-          >
+            <button
+              onClick={handleZoom}
+              className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
+              title="Zoom"
+            >
+              <ZoomIn className="w-5 h-5 text-gray-800" />
+            </button>
+            <button
+              onClick={handleRotate}
+              className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
+              title="Rotate"
+            >
+              <RotateCw className="w-5 h-5 text-gray-800" />
+            </button>
+            <button
+              onClick={handleFullscreen}
+              className="bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg"
+              title="Fullscreen"
+            >
             <Maximize2 className="w-5 h-5 text-gray-800" />
           </button>
         </div>
+        )}
 
-        {/* Image Counter */}
+        {/* Image/View Counter */}
         <div className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1.5 rounded-full text-sm font-medium">
-          {selectedIndex + 1} / {images?.length}
+          {selectedIndex + 1} / {totalItems}
         </div>
       </div>
 
       {/* Thumbnail Gallery */}
       <div className="grid grid-cols-5 gap-3">
-        {images?.map((image, index) => (
+        {/* 3D Viewer Thumbnail */}
+        {show3DViewer && (
           <button
-            key={image?.id}
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => setSelectedIndex(0)}
             className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-              selectedIndex === index
+              selectedIndex === 0
                 ? 'border-blue-600 ring-2 ring-blue-200'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <Image
-              src={image?.url}
-              alt={image?.alt}
-              fill
-              sizes="(max-width: 768px) 20vw, 10vw"
-              className="object-cover"
-              placeholder="blur"
-              blurDataURL={shimmerBlurDataUrl}
-              quality={60}
-            />
-            {image?.type === 'video' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
-                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-gray-800 border-b-[6px] border-b-transparent ml-1"></div>
-                </div>
-              </div>
-            )}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <span className="text-white text-2xl">🎨</span>
+            </div>
+            <div className="absolute bottom-1 inset-x-0 text-center">
+              <span className="text-[10px] font-medium text-white bg-black/50 px-1 rounded">3D</span>
+            </div>
           </button>
-        ))}
+        )}
+
+        {/* Image Thumbnails */}
+        {images?.map((image, index) => {
+          const thumbnailIndex = show3DViewer ? index + 1 : index;
+          return (
+            <button
+              key={image?.id}
+              onClick={() => setSelectedIndex(thumbnailIndex)}
+              className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                selectedIndex === thumbnailIndex
+                  ? 'border-blue-600 ring-2 ring-blue-200'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <Image
+                src={image?.url}
+                alt={image?.alt}
+                fill
+                sizes="(max-width: 768px) 20vw, 10vw"
+                className="object-cover"
+                placeholder="blur"
+                blurDataURL={shimmerBlurDataUrl}
+                quality={60}
+              />
+              {image?.type === 'video' && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
+                    <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-gray-800 border-b-[6px] border-b-transparent ml-1"></div>
+                  </div>
+                </div>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Fullscreen Modal */}
