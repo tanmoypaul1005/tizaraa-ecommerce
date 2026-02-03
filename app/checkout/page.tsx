@@ -3,30 +3,41 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useCartStore } from '@/app/store/cartStore';
 import { ShoppingBag, User, MapPin, Phone, CreditCard, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { shimmerBlurDataUrl } from '@/app/lib/blur-placeholder';
 
-const CheckoutPage = () => {
+// Form data interface
+interface CheckoutFormData {
+  name: string;
+  phone: string;
+  address: string;
+}
+
+const CheckoutPage: React.FC = () => {
   const router = useRouter();
   const { items, subtotal, tax, shipping, total, clearCart } = useCartStore();
   
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    address: '',
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    getValues,
+  } = useForm<CheckoutFormData>({
+    mode: 'onBlur',
+    defaultValues: {
+      name: '',
+      phone: '',
+      address: '',
+    },
   });
   
-  const [errors, setErrors] = useState({
-    name: '',
-    phone: '',
-    address: '',
-  });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderId, setOrderId] = useState('');
+  const [orderPlaced, setOrderPlaced] = useState<boolean>(false);
+  const [orderId, setOrderId] = useState<string>('');
+  const [submittedData, setSubmittedData] = useState<CheckoutFormData | null>(null);
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -35,76 +46,24 @@ const CheckoutPage = () => {
     }
   }, [items.length, orderPlaced, router]);
 
-  const validateForm = () => {
-    const newErrors = {
-      name: '',
-      phone: '',
-      address: '',
-    };
-    
-    let isValid = true;
+  // Form submission handler
+  const onSubmit: SubmitHandler<CheckoutFormData> = async (data) => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Validate name
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-      isValid = false;
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
-      isValid = false;
-    }
-
-    // Validate phone
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-      isValid = false;
-    } else if (!/^\+?[\d\s\-()]{10,}$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
-      isValid = false;
-    }
-
-    // Validate address
-    if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
-      isValid = false;
-    } else if (formData.address.trim().length < 10) {
-      newErrors.address = 'Please enter a complete address';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Clear error when user starts typing
-    if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    // Simulate API call
-    setTimeout(() => {
       // Generate order ID
       const newOrderId = 'ORD-' + Date.now().toString().slice(-8);
       setOrderId(newOrderId);
+      setSubmittedData(data);
       setOrderPlaced(true);
-      setIsSubmitting(false);
       
       // Clear cart
       clearCart();
-    }, 2000);
+    } catch (error) {
+      console.error('Order placement failed:', error);
+      // Handle error (you can add error state and display to user)
+    }
   };
 
   // Success screen
@@ -136,7 +95,7 @@ const CheckoutPage = () => {
                   <User className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-600">Name</p>
-                    <p className="font-semibold text-gray-900">{formData.name}</p>
+                    <p className="font-semibold text-gray-900">{submittedData?.name}</p>
                   </div>
                 </div>
                 
@@ -144,7 +103,7 @@ const CheckoutPage = () => {
                   <Phone className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-600">Phone</p>
-                    <p className="font-semibold text-gray-900">{formData.phone}</p>
+                    <p className="font-semibold text-gray-900">{submittedData?.phone}</p>
                   </div>
                 </div>
                 
@@ -152,7 +111,7 @@ const CheckoutPage = () => {
                   <MapPin className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-600">Delivery Address</p>
-                    <p className="font-semibold text-gray-900">{formData.address}</p>
+                    <p className="font-semibold text-gray-900">{submittedData?.address}</p>
                   </div>
                 </div>
               </div>
@@ -185,7 +144,7 @@ const CheckoutPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Checkout Form */}
             <div className="lg:col-span-2">
-              <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+              <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Delivery Information</h2>
                 
                 <div className="space-y-6">
@@ -201,19 +160,29 @@ const CheckoutPage = () => {
                       <input
                         type="text"
                         id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
+                        {...register('name', {
+                          required: 'Name is required',
+                          minLength: {
+                            value: 2,
+                            message: 'Name must be at least 2 characters',
+                          },
+                          validate: {
+                            notEmpty: (value) => value.trim().length > 0 || 'Name cannot be empty',
+                          },
+                        })}
                         className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-gray-900 ${
                           errors.name
                             ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
                             : 'border-gray-200 focus:border-blue-500 focus:ring-blue-200'
                         }`}
                         placeholder="John Doe"
+                        aria-invalid={errors.name ? 'true' : 'false'}
                       />
                     </div>
                     {errors.name && (
-                      <p className="mt-2 text-sm text-red-600">{errors.name}</p>
+                      <p className="mt-2 text-sm text-red-600" role="alert">
+                        {errors.name.message}
+                      </p>
                     )}
                   </div>
 
@@ -229,19 +198,29 @@ const CheckoutPage = () => {
                       <input
                         type="tel"
                         id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
+                        {...register('phone', {
+                          required: 'Phone number is required',
+                          pattern: {
+                            value: /^\+?[\d\s\-()]{10,}$/,
+                            message: 'Please enter a valid phone number',
+                          },
+                          validate: {
+                            notEmpty: (value) => value.trim().length > 0 || 'Phone cannot be empty',
+                          },
+                        })}
                         className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-gray-900 ${
                           errors.phone
                             ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
                             : 'border-gray-200 focus:border-blue-500 focus:ring-blue-200'
                         }`}
                         placeholder="+1 (555) 123-4567"
+                        aria-invalid={errors.phone ? 'true' : 'false'}
                       />
                     </div>
                     {errors.phone && (
-                      <p className="mt-2 text-sm text-red-600">{errors.phone}</p>
+                      <p className="mt-2 text-sm text-red-600" role="alert">
+                        {errors.phone.message}
+                      </p>
                     )}
                   </div>
 
@@ -256,9 +235,16 @@ const CheckoutPage = () => {
                       </div>
                       <textarea
                         id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
+                        {...register('address', {
+                          required: 'Address is required',
+                          minLength: {
+                            value: 10,
+                            message: 'Please enter a complete address (at least 10 characters)',
+                          },
+                          validate: {
+                            notEmpty: (value) => value.trim().length >= 10 || 'Please enter a complete address',
+                          },
+                        })}
                         rows={4}
                         className={`w-full pl-12 pr-4 py-3.5 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all resize-none text-gray-900 ${
                           errors.address
@@ -266,10 +252,13 @@ const CheckoutPage = () => {
                             : 'border-gray-200 focus:border-blue-500 focus:ring-blue-200'
                         }`}
                         placeholder="123 Main Street, Apartment 4B&#10;New York, NY 10001"
+                        aria-invalid={errors.address ? 'true' : 'false'}
                       />
                     </div>
                     {errors.address && (
-                      <p className="mt-2 text-sm text-red-600">{errors.address}</p>
+                      <p className="mt-2 text-sm text-red-600" role="alert">
+                        {errors.address.message}
+                      </p>
                     )}
                   </div>
                 </div>
