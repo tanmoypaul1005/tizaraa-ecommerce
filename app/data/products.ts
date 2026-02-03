@@ -68,9 +68,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true },
-        { id: 'gray', name: 'Gray', value: 'gray', hex: '#6B7280', available: true },
-        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true },
+        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 0, },
+        { id: 'gray', name: 'Gray', value: 'gray', hex: '#6B7280', available: true,priceModifier: 15 },
+        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true,priceModifier: 25 },
       ],
       materials: [
         { id: 'cotton', name: '80/20 Cotton Blend', value: 'cotton', available: true },
@@ -90,7 +90,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
   },
   {
-    id: '03',
+    id: '02',
     name: 'Personalized Phone Case',
     slug: 'phone-case',
     shortDescription: 'Durable custom phone case with premium protection.',
@@ -108,9 +108,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'clear', name: 'Clear', value: 'clear', hex: '#FFFFFF', available: true },
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true },
-        { id: 'blue', name: 'Blue', value: 'blue', hex: '#3B82F6', available: true },
+        { id: 'clear', name: 'Clear', value: 'clear', hex: '#FFFFFF', available: true,priceModifier: 0 },
+        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 10 },
+        { id: 'blue', name: 'Blue', value: 'blue', hex: '#3B82F6', available: true,priceModifier: 17 },
       ],
       materials: [
         { id: 'silicone', name: 'Silicone', value: 'silicone', available: true },
@@ -128,7 +128,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
   },
   {
-    id: '04',
+    id: '03',
     name: 'Custom Baseball Cap',
     slug: 'baseball-cap',
     shortDescription: 'Classic baseball cap with embroidered customization.',
@@ -146,10 +146,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true },
-        { id: 'white', name: 'White', value: 'white', hex: '#FFFFFF', available: true },
-        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true },
-        { id: 'red', name: 'Red', value: 'red', hex: '#DC2626', available: true },
+        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 0 },
+        { id: 'white', name: 'White', value: 'white', hex: '#FFFFFF', available: true , priceModifier: 10 },
+        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true, priceModifier: 20 },
+        { id: 'red', name: 'Red', value: 'red', hex: '#DC2626', available: true ,priceModifier: 25},
       ],
       materials: [
         { id: 'cotton', name: '100% Cotton', value: 'cotton', available: true },
@@ -165,7 +165,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
   },
   {
-    id: '05',
+    id: '04',
     name: 'Premium Water Bottle',
     slug: 'water-bottle',
     shortDescription: 'Insulated stainless steel bottle with custom engraving.',
@@ -204,7 +204,7 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
   },
   {
-    id: '06',
+    id: '05',
     name: 'Custom Tote Bag',
     slug: 'tote-bag',
     shortDescription: 'Eco-friendly canvas tote with personalized print.',
@@ -222,9 +222,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'natural', name: 'Natural', value: 'natural', hex: '#F5F5DC', available: true },
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true },
-        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true },
+        { id: 'natural', name: 'Natural', value: 'natural', hex: '#F5F5DC', available: true,priceModifier: 0 },
+        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 30 },
+        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true ,priceModifier: 35 },
       ],
       materials: [
         { id: 'canvas', name: '100% Cotton Canvas', value: 'canvas', available: true },
@@ -262,10 +262,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Matte Black', value: 'black', hex: '#1F2937', available: true },
-        { id: 'silver', name: 'Space Silver', value: 'silver', hex: '#9CA3AF', available: true },
-        { id: 'white', name: 'Cloud White', value: 'white', hex: '#F9FAFB', available: true },
-        { id: 'blue', name: 'Ocean Blue', value: 'blue', hex: '#3B82F6', available: true },
+        { id: 'black', name: 'Matte Black', value: 'black', hex: '#1F2937', available: true,priceModifier: 0 },
+        { id: 'silver', name: 'Space Silver', value: 'silver', hex: '#9CA3AF', available: true,priceModifier: 25 },
+        { id: 'white', name: 'Cloud White', value: 'white', hex: '#F9FAFB', available: true,priceModifier: 35 },
+        { id: 'blue', name: 'Ocean Blue', value: 'blue', hex: '#3B82F6', available: true,priceModifier: 46 },
       ],
       materials: [
         { id: 'standard', name: 'Standard Padding', value: 'standard', available: true, priceModifier: 0 },
@@ -345,9 +345,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'brown', name: 'Vintage Brown', value: 'brown', hex: '#92400E', available: true },
-        { id: 'black', name: 'Classic Black', value: 'black', hex: '#000000', available: true },
-        { id: 'tan', name: 'Caramel Tan', value: 'tan', hex: '#D97706', available: true },
+        { id: 'brown', name: 'Vintage Brown', value: 'brown', hex: '#92400E', available: true,priceModifier: 0 },
+        { id: 'black', name: 'Classic Black', value: 'black', hex: '#000000', available: true,priceModifier: 23 },
+        { id: 'tan', name: 'Caramel Tan', value: 'tan', hex: '#D97706', available: true,priceModifier: 30 },
       ],
       materials: [
         { id: 'fullgrain', name: 'Full-Grain Leather', value: 'fullgrain', available: true, priceModifier: 0 },
@@ -387,10 +387,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'white', name: 'Ivory White', value: 'white', hex: '#F9FAFB', available: true },
-        { id: 'blue', name: 'Ocean Blue', value: 'blue', hex: '#1E40AF', available: true },
-        { id: 'gray', name: 'Stone Gray', value: 'gray', hex: '#6B7280', available: true },
-        { id: 'green', name: 'Sage Green', value: 'green', hex: '#059669', available: true },
+        { id: 'white', name: 'Ivory White', value: 'white', hex: '#F9FAFB', available: true,priceModifier: 0 },
+        { id: 'blue', name: 'Ocean Blue', value: 'blue', hex: '#1E40AF', available: true,priceModifier: 15 },
+        { id: 'gray', name: 'Stone Gray', value: 'gray', hex: '#6B7280', available: true,priceModifier: 45 },
+        { id: 'green', name: 'Sage Green', value: 'green', hex: '#059669', available: true,priceModifier: 60 },
       ],
       materials: [
         { id: 'standard', name: 'Standard Ceramic', value: 'standard', available: true, priceModifier: 0 },
@@ -429,10 +429,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Carbon Black', value: 'black', hex: '#111827', available: true },
-        { id: 'blue', name: 'Electric Blue', value: 'blue', hex: '#2563EB', available: true },
-        { id: 'red', name: 'Flame Red', value: 'red', hex: '#DC2626', available: true },
-        { id: 'green', name: 'Forest Green', value: 'green', hex: '#059669', available: true },
+        { id: 'black', name: 'Carbon Black', value: 'black', hex: '#111827', available: true,priceModifier: 0 },
+        { id: 'blue', name: 'Electric Blue', value: 'blue', hex: '#2563EB', available: true,priceModifier: 15 },
+        { id: 'red', name: 'Flame Red', value: 'red', hex: '#DC2626', available: true,priceModifier: 30 },
+        { id: 'green', name: 'Forest Green', value: 'green', hex: '#059669', available: true,priceModifier: 45 },
       ],
       materials: [
         { id: 'standard', name: 'Rubber Finish', value: 'standard', available: true, priceModifier: 0 },
@@ -471,10 +471,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'purple', name: 'Lavender Purple', value: 'purple', hex: '#8B5CF6', available: true },
-        { id: 'pink', name: 'Coral Pink', value: 'pink', hex: '#EC4899', available: true },
-        { id: 'blue', name: 'Sky Blue', value: 'blue', hex: '#3B82F6', available: true },
-        { id: 'green', name: 'Mint Green', value: 'green', hex: '#10B981', available: true },
+        { id: 'purple', name: 'Lavender Purple', value: 'purple', hex: '#8B5CF6', available: true,priceModifier: 0 },
+        { id: 'pink', name: 'Coral Pink', value: 'pink', hex: '#EC4899', available: true,priceModifier: 34 },
+        { id: 'blue', name: 'Sky Blue', value: 'blue', hex: '#3B82F6', available: true,priceModifier: 54 },
+        { id: 'green', name: 'Mint Green', value: 'green', hex: '#10B981', available: true,priceModifier: 78 },
       ],
       materials: [
         { id: 'tpe', name: 'TPE Eco-Friendly', value: 'tpe', available: true, priceModifier: 0 },
@@ -515,11 +515,11 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Matte Black', value: 'black', hex: '#000000', available: true },
-        { id: 'silver', name: 'Stainless Steel', value: 'silver', hex: '#C0C0C0', available: true },
-        { id: 'rose', name: 'Rose Gold', value: 'rose', hex: '#B76E79', available: true },
-        { id: 'blue', name: 'Navy Blue', value: 'blue', hex: '#1E3A8A', available: true },
-        { id: 'mint', name: 'Mint Green', value: 'mint', hex: '#6EE7B7', available: true },
+        { id: 'black', name: 'Matte Black', value: 'black', hex: '#000000', available: true,priceModifier: 0 },
+        { id: 'silver', name: 'Stainless Steel', value: 'silver', hex: '#C0C0C0', available: true,priceModifier: 20 },
+        { id: 'rose', name: 'Rose Gold', value: 'rose', hex: '#B76E79', available: true,priceModifier: 25 },
+        { id: 'blue', name: 'Navy Blue', value: 'blue', hex: '#1E3A8A', available: true,priceModifier: 35 },
+        { id: 'mint', name: 'Mint Green', value: 'mint', hex: '#6EE7B7', available: true, priceModifier: 40 },
       ],
       materials: [
         { id: 'steel', name: 'Stainless Steel', value: 'steel', available: true, priceModifier: 0 },
@@ -559,10 +559,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Stealth Black', value: 'black', hex: '#000000', available: true },
+        { id: 'black', name: 'Stealth Black', value: 'black', hex: '#000000', available: true,priceModifier: 0 },
         { id: 'rgb', name: 'RGB Edge', value: 'rgb', hex: '#FF00FF', available: true, priceModifier: 10 },
-        { id: 'blue', name: 'Cyberpunk Blue', value: 'blue', hex: '#3B82F6', available: true },
-        { id: 'red', name: 'Dragon Red', value: 'red', hex: '#DC2626', available: true },
+        { id: 'blue', name: 'Cyberpunk Blue', value: 'blue', hex: '#3B82F6', available: true,priceModifier: 20 },
+        { id: 'red', name: 'Dragon Red', value: 'red', hex: '#DC2626', available: true,priceModifier: 25 },
       ],
       materials: [
         { id: 'cloth', name: 'Speed Cloth', value: 'cloth', available: true, priceModifier: 0 },
@@ -601,9 +601,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c16-1', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c16-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF' },
-        { id: 'c16-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0' },
+        { id: 'c16-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
+        { id: 'c16-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF',priceModifier: 30 },
+        { id: 'c16-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0',priceModifier: 56 },
       ],
       materials: [
         { id: 'm16-1', name: 'Standard', value: 'ABS Plastic', available: true },
@@ -638,10 +638,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c17-1', name: 'Matte Black', value: 'Matte Black', available: true, hex: '#1A1A1A' },
-        { id: 'c17-2', name: 'Ocean Blue', value: 'Ocean Blue', available: true, hex: '#006994' },
-        { id: 'c17-3', name: 'Rose Gold', value: 'Rose Gold', available: true, hex: '#B76E79' },
-        { id: 'c17-4', name: 'Forest Green', value: 'Forest Green', available: true, hex: '#228B22' },
+        { id: 'c17-1', name: 'Matte Black', value: 'Matte Black', available: true, hex: '#1A1A1A', priceModifier: 0 },
+        { id: 'c17-2', name: 'Ocean Blue', value: 'Ocean Blue', available: true, hex: '#006994', priceModifier: 20 },
+        { id: 'c17-3', name: 'Rose Gold', value: 'Rose Gold', available: true, hex: '#B76E79', priceModifier: 25 },
+        { id: 'c17-4', name: 'Forest Green', value: 'Forest Green', available: true, hex: '#228B22', priceModifier: 35 },
       ],
       materials: [
         { id: 'm17-1', name: 'Stainless Steel', value: '18/8 Stainless Steel', available: true },
@@ -678,9 +678,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c18-1', name: 'White', value: 'White', available: true, hex: '#FFFFFF' },
-        { id: 'c18-2', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c18-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0' },
+        { id: 'c18-1', name: 'White', value: 'White', available: true, hex: '#FFFFFF', priceModifier: 0 },
+        { id: 'c18-2', name: 'Black', value: 'Black', available: true, hex: '#000000', priceModifier: 20 },
+        { id: 'c18-3', name: 'Silver', value: 'Silver', available: true, hex: '#C0C0C0', priceModifier: 40 },
       ],
       materials: [
         { id: 'm18-1', name: 'Aluminum', value: 'Aluminum Alloy', available: true },
@@ -753,9 +753,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c20-1', name: 'Dark Brown', value: 'Dark Brown', available: true, hex: '#654321' },
-        { id: 'c20-2', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c20-3', name: 'Tan', value: 'Tan', available: true, hex: '#D2B48C' },
+        { id: 'c20-1', name: 'Dark Brown', value: 'Dark Brown', available: true, hex: '#654321',priceModifier: 0 },
+        { id: 'c20-2', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 25 },
+        { id: 'c20-3', name: 'Tan', value: 'Tan', available: true, hex: '#D2B48C',priceModifier: 25 },
       ],
       materials: [
         { id: 'm20-1', name: 'Full Grain Leather', value: 'Full Grain', available: true },
@@ -792,9 +792,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c21-1', name: 'Matte Black', value: 'Matte Black', available: true, hex: '#1A1A1A' },
-        { id: 'c21-2', name: 'Pearl White', value: 'Pearl White', available: true, hex: '#F8F8F8' },
-        { id: 'c21-3', name: 'Midnight Blue', value: 'Midnight Blue', available: true, hex: '#191970' },
+        { id: 'c21-1', name: 'Matte Black', value: 'Matte Black', available: true, hex: '#1A1A1A',priceModifier: 0 },
+        { id: 'c21-2', name: 'Pearl White', value: 'Pearl White', available: true, hex: '#F8F8F8',priceModifier: 25 },
+        { id: 'c21-3', name: 'Midnight Blue', value: 'Midnight Blue', available: true, hex: '#191970',priceModifier: 35 },
       ],
       materials: [
         { id: 'm21-1', name: 'Premium', value: 'Aluminum Case', available: true },
@@ -829,10 +829,10 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c22-1', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c22-2', name: 'Navy Blue', value: 'Navy Blue', available: true, hex: '#000080' },
-        { id: 'c22-3', name: 'Rose Pink', value: 'Rose Pink', available: true, hex: '#FF66CC' },
-        { id: 'c22-4', name: 'Lime Green', value: 'Lime Green', available: true, hex: '#32CD32' },
+        { id: 'c22-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
+        { id: 'c22-2', name: 'Navy Blue', value: 'Navy Blue', available: true, hex: '#000080',priceModifier: 15 },
+        { id: 'c22-3', name: 'Rose Pink', value: 'Rose Pink', available: true, hex: '#FF66CC',priceModifier: 24 },
+        { id: 'c22-4', name: 'Lime Green', value: 'Lime Green', available: true, hex: '#32CD32',priceModifier: 35 },
       ],
       materials: [
         { id: 'm22-1', name: 'Silicone Band', value: 'Soft Silicone', available: true },
@@ -868,9 +868,9 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c23-1', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c23-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF' },
-        { id: 'c23-3', name: 'Blue', value: 'Blue', available: true, hex: '#0000FF' },
+        { id: 'c23-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
+        { id: 'c23-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF',priceModifier: 20 },
+        { id: 'c23-3', name: 'Blue', value: 'Blue', available: true, hex: '#0000FF',priceModifier: 25 },
       ],
       materials: [
         { id: 'm23-1', name: 'Aluminum', value: 'Aluminum Alloy', available: true },
@@ -905,14 +905,14 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c24-1', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c24-2', name: 'Charcoal Gray', value: 'Charcoal Gray', available: true, hex: '#36454F' },
+        { id: 'c24-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
+        { id: 'c24-2', name: 'Charcoal Gray', value: 'Charcoal Gray', available: true, hex: '#36454F',priceModifier: 15 },
       ],
       materials: [
         { id: 'm24-1', name: 'Waterproof Nylon', value: 'Waterproof Nylon', available: true },
       ],
       sizes: [
-        { id: 's24-1', name: 'Standard', value: 'Standard (30L)', available: true },
+        { id: 's24-1', name: 'Standard', value: 'Standard (30L)', available: true ,priceModifier: 0},
         { id: 's24-2', name: 'Large', value: 'Large (40L)', available: true, priceModifier: 20 },
       ],
     },
@@ -942,16 +942,16 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'c25-1', name: 'Black', value: 'Black', available: true, hex: '#000000' },
-        { id: 'c25-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF' },
-        { id: 'c25-3', name: 'Walnut', value: 'Walnut', available: true, hex: '#5C4033' },
+        { id: 'c25-1', name: 'Black', value: 'Black', available: true, hex: '#000000',priceModifier: 0 },
+        { id: 'c25-2', name: 'White', value: 'White', available: true, hex: '#FFFFFF',priceModifier: 15 },
+        { id: 'c25-3', name: 'Walnut', value: 'Walnut', available: true, hex: '#5C4033',priceModifier: 30 },
       ],
       materials: [
         { id: 'm25-1', name: 'Steel Frame', value: 'Steel Frame', available: true },
       ],
       sizes: [
-        { id: 's25-1', name: '32"', value: '32" Wide', available: true, priceModifier: -30 },
-        { id: 's25-2', name: '42"', value: '42" Wide', available: true },
+        { id: 's25-1', name: '32"', value: '32" Wide', available: true, priceModifier: 0 },
+        { id: 's25-2', name: '42"', value: '42" Wide', available: true,priceModifier: 20 },
         { id: 's25-3', name: '48"', value: '48" Wide', available: true, priceModifier: 30 },
       ],
     },
