@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, Sphere, MeshDistortMaterial } from '@react-three/drei';
@@ -52,9 +51,7 @@ function FloatingParticles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial size={0.05} color="#8b5cf6" transparent opacity={0.6} />

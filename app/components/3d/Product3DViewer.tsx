@@ -79,8 +79,8 @@ function PhoneCaseModel({ color, materialProps }: { color: string; materialProps
         <meshStandardMaterial {...materialProps} />
       </RoundedBox>
       {/* Camera cutout */}
-      <mesh position={[-0.4, 1.2, 0.16]}>
-        <cylinderGeometry args={[0.15, 0.15, 0.1, 16]} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh position={[-0.4, 1.2, 0.16]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.15, 0.15, 0.1, 16]} />
         <meshStandardMaterial color="#000000" metalness={0.9} roughness={0.1} />
       </mesh>
     </group>
