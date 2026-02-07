@@ -1,21 +1,64 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ProductCard from '@/app/components/ProductCard';
 import SortDropdown, { SortOption } from '@/app/components/SortDropdown';
 import { MOCK_PRODUCTS, sortProducts } from '@/app/data/products';
 import { Filter, Search, Star } from 'lucide-react';
 
 const ProductsPage = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     
-    const [sortBy, setSortBy] = useState<SortOption>('featured');
-    const [selectedCategory, setSelectedCategory] = useState<string>('all');
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
-    const [minRating, setMinRating] = useState<number>(0);
-    const [selectedColors, setSelectedColors] = useState<string[]>([]);
-    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+    // Initialize state from URL parameters
+    const [sortBy, setSortBy] = useState<SortOption>(() => {
+        const sort = searchParams.get('sort');
+        return (sort as SortOption) || 'featured';
+    });
+    const [selectedCategory, setSelectedCategory] = useState<string>(() => {
+        return searchParams.get('category') || 'all';
+    });
+    const [priceRange, setPriceRange] = useState<[number, number]>(() => {
+        const minPrice = searchParams.get('minPrice');
+        const maxPrice = searchParams.get('maxPrice');
+        return [
+            minPrice ? Number(minPrice) : 0,
+            maxPrice ? Number(maxPrice) : 200
+        ];
+    });
+    const [minRating, setMinRating] = useState<number>(() => {
+        const rating = searchParams.get('rating');
+        return rating ? Number(rating) : 0;
+    });
+    const [selectedColors, setSelectedColors] = useState<string[]>(() => {
+        const colors = searchParams.get('colors');
+        return colors ? colors.split(',') : [];
+    });
+    const [selectedSizes, setSelectedSizes] = useState<string[]>(() => {
+        const sizes = searchParams.get('sizes');
+        return sizes ? sizes.split(',') : [];
+    });
     const [showFilters, setShowFilters] = useState(false);
     const [colorSearch, setColorSearch] = useState<string>('');
+
+    // Update URL when filters change
+    useEffect(() => {
+        const params = new URLSearchParams();
+        
+        if (sortBy !== 'featured') params.set('sort', sortBy);
+        if (selectedCategory !== 'all') params.set('category', selectedCategory);
+        if (priceRange[0] !== 0) params.set('minPrice', priceRange[0].toString());
+        if (priceRange[1] !== 200) params.set('maxPrice', priceRange[1].toString());
+        if (minRating > 0) params.set('rating', minRating.toString());
+        if (selectedColors.length > 0) params.set('colors', selectedColors.join(','));
+        if (selectedSizes.length > 0) params.set('sizes', selectedSizes.join(','));
+        
+        const queryString = params.toString();
+        const newUrl = queryString ? `?${queryString}` : '/product';
+        
+        router.replace(newUrl, { scroll: false });
+    }, [sortBy, selectedCategory, priceRange, minRating, selectedColors, selectedSizes, router]);
 
     // Get unique values for filters
     const filterOptions = useMemo(() => {
