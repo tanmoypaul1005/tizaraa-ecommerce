@@ -21,12 +21,6 @@ const Navbar = () => {
                     
                     {/* Navigation Links */}
                     <div className="flex items-center gap-4 lg:gap-6">
-                        <Link
-                            href="/product"
-                            className="text-gray-700 hover:text-gray-900 font-medium transition-colors whitespace-nowrap"
-                        >
-                            Products
-                        </Link>
                         <ComparisonBadge />
                         <WishlistBadge />
                         <CartBadge />
