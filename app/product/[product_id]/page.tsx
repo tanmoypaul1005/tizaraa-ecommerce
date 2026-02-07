@@ -341,11 +341,11 @@ export default function ProductDetailsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="lg:sticky lg:top-8 lg:self-start">
-            {/* Product Images */}
+            {/* Product Images with 3D Viewer */}
             <ProductImageGallery 
-              key={`${selectedColor}-${displayImages.length}-${displayImages[0]?.id}`}
+              key={`${displayImages.length}-${displayImages[0]?.id}`}
               images={displayImages.length > 0 ? displayImages : product?.images} 
-              show3DViewer={false}
+              show3DViewer={true}
               productName={product?.name}
             />
           </div>
