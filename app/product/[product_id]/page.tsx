@@ -40,9 +40,25 @@ export default function ProductDetailsPage() {
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; discount: number } | null>(null);
   const [promoError, setPromoError] = useState('');
   const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+  const [displayImages, setDisplayImages] = useState<any[]>([]);
 
   // Check if product is in wishlist
   const productInWishlist = product ? isInWishlist(product.id) : false;
+
+  // Update displayed images when color variant changes
+  useEffect(() => {
+    if (!product) return;
+
+    const selectedColorVariant = product.variants.colors.find(c => c.id === selectedColor);
+    
+    // If selected color has its own images, show all of them
+    if (selectedColorVariant?.images && selectedColorVariant.images.length > 0) {
+      setDisplayImages(selectedColorVariant.images);
+    } else {
+      // If no variant images, show all default product images
+      setDisplayImages(product.images);
+    }
+  }, [selectedColor, product]);
 
   // Update URL when configuration changes (without page reload)
   useEffect(() => {
@@ -259,11 +275,16 @@ export default function ProductDetailsPage() {
     setIsAddingToCart(true);
 
     try {
+      // Get the image for the selected color variant
+      const selectedColorVariant = product.variants.colors.find(c => c.id === selectedColor);
+      const itemImage = (selectedColorVariant?.images && selectedColorVariant.images.length > 0) 
+        ? selectedColorVariant.images[0].url 
+        : product.images[0].url;
 
       await addItem({
         productId: product?.id,
         name: product?.name,
-        image: product?.images[0]?.url,
+        image: itemImage,
         price: totals.finalTotal / quantity, // Use discounted price per item
         quantity,
         selectedColor: product?.variants?.colors?.find(c => c.id === selectedColor)?.name,
@@ -285,10 +306,16 @@ export default function ProductDetailsPage() {
     if (!product) return;
 
     try {
+      // Get the image for the selected color variant
+      const selectedColorVariant = product.variants.colors.find(c => c.id === selectedColor);
+      const itemImage = (selectedColorVariant?.images && selectedColorVariant.images.length > 0) 
+        ? selectedColorVariant.images[0].url 
+        : product.images[0].url;
+
       await toggleWishlist({
         productId: product?.id,
         name: product?.name,
-        image: product?.images[0]?.url,
+        image: itemImage,
         price: currentPrice,
       });
     } catch (error) {
@@ -314,9 +341,10 @@ export default function ProductDetailsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="lg:sticky lg:top-8 lg:self-start">
-            {/* Product Images with 3D Viewer as First Image */}
+            {/* Product Images with 3D Viewer */}
             <ProductImageGallery 
-              images={product?.images} 
+              key={`${displayImages.length}-${displayImages[0]?.id}`}
+              images={displayImages.length > 0 ? displayImages : product?.images} 
               show3DViewer={true}
               productName={product?.name}
             />

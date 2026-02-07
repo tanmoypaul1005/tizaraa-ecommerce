@@ -39,6 +39,7 @@ export interface Variant {
   available: boolean;
   hex?: string;
   priceModifier?: number;
+  images?: ProductImage[];
 }
 
 export interface Specification {
@@ -68,9 +69,39 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 0, },
-        { id: 'gray', name: 'Gray', value: 'gray', hex: '#6B7280', available: true,priceModifier: 15 },
-        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true,priceModifier: 25 },
+        { 
+          id: 'black', 
+          name: 'Black', 
+          value: 'black', 
+          hex: '#000000', 
+          available: true,
+          priceModifier: 0,
+          images: [
+            { id: 'b1', url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop', alt: 'Black Hoodie', type: 'image' },
+          ]
+        },
+        { 
+          id: 'gray', 
+          name: 'Gray', 
+          value: 'gray', 
+          hex: '#6B7280', 
+          available: true,
+          priceModifier: 15,
+          images: [
+            { id: 'g1', url: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&h=800&fit=crop', alt: 'Gray Hoodie', type: 'image' },
+          ]
+        },
+        { 
+          id: 'navy', 
+          name: 'Navy', 
+          value: 'navy', 
+          hex: '#1E3A8A', 
+          available: true,
+          priceModifier: 25,
+          images: [
+            { id: 'n1', url: 'https://images.unsplash.com/photo-1620799139834-6b8f844fbe61?w=800&h=800&fit=crop', alt: 'Navy Hoodie', type: 'image' },
+          ]
+        },
       ],
       materials: [
         { id: 'cotton', name: '80/20 Cotton Blend', value: 'cotton', available: true },
@@ -108,9 +139,39 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'clear', name: 'Clear', value: 'clear', hex: '#FFFFFF', available: true,priceModifier: 0 },
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 10 },
-        { id: 'blue', name: 'Blue', value: 'blue', hex: '#3B82F6', available: true,priceModifier: 17 },
+        { 
+          id: 'clear', 
+          name: 'Clear', 
+          value: 'clear', 
+          hex: '#FFFFFF', 
+          available: true,
+          priceModifier: 0,
+          images: [
+            { id: 'c1', url: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=800&h=800&fit=crop', alt: 'Clear Phone Case', type: 'image' },
+          ]
+        },
+        { 
+          id: 'black', 
+          name: 'Black', 
+          value: 'black', 
+          hex: '#000000', 
+          available: true,
+          priceModifier: 10,
+          images: [
+            { id: 'b1', url: 'https://images.unsplash.com/photo-1556656793-08538906a9f8?w=800&h=800&fit=crop', alt: 'Black Phone Case', type: 'image' },
+          ]
+        },
+        { 
+          id: 'blue', 
+          name: 'Blue', 
+          value: 'blue', 
+          hex: '#3B82F6', 
+          available: true,
+          priceModifier: 17,
+          images: [
+            { id: 'bl1', url: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=800&h=800&fit=crop', alt: 'Blue Phone Case', type: 'image' },
+          ]
+        },
       ],
       materials: [
         { id: 'silicone', name: 'Silicone', value: 'silicone', available: true },
@@ -146,10 +207,50 @@ export const MOCK_PRODUCTS: Product[] = [
     ],
     variants: {
       colors: [
-        { id: 'black', name: 'Black', value: 'black', hex: '#000000', available: true,priceModifier: 0 },
-        { id: 'white', name: 'White', value: 'white', hex: '#FFFFFF', available: true , priceModifier: 10 },
-        { id: 'navy', name: 'Navy', value: 'navy', hex: '#1E3A8A', available: true, priceModifier: 20 },
-        { id: 'red', name: 'Red', value: 'red', hex: '#DC2626', available: true ,priceModifier: 25},
+        { 
+          id: 'black', 
+          name: 'Yellow', 
+          value: 'yellow', 
+          hex: '#FFFFC5', 
+          available: true,
+          priceModifier: 0,
+          images: [
+            { id: 'b1', url: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=800&h=800&fit=crop', alt: 'Black Baseball Cap', type: 'image' },
+          ]
+        },
+        { 
+          id: 'white', 
+          name: 'White', 
+          value: 'white', 
+          hex: '#FFFFFF', 
+          available: true,
+          priceModifier: 10,
+          images: [
+            { id: 'w1', url: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=800&fit=crop', alt: 'White Baseball Cap', type: 'image' },
+          ]
+        },
+        { 
+          id: 'navy', 
+          name: 'Navy', 
+          value: 'navy', 
+          hex: '#1E3A8A', 
+          available: true,
+          priceModifier: 20,
+          images: [
+            { id: 'n1', url: 'data:image/jpeg;base64,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', alt: 'Navy Baseball Cap', type: 'image' },
+          ]
+        },
+        { 
+          id: 'red', 
+          name: 'Red', 
+          value: 'red', 
+          hex: '#DC2626', 
+          available: true,
+          priceModifier: 25,
+          images: [
+            { id: 'r1', url: 'data:image/jpeg;base64,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', alt: 'Red Baseball Cap', type: 'image' },
+          ]
+        },
       ],
       materials: [
         { id: 'cotton', name: '100% Cotton', value: 'cotton', available: true },
