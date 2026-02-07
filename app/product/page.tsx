@@ -55,7 +55,7 @@ const ProductsPage = () => {
         if (selectedSizes.length > 0) params.set('sizes', selectedSizes.join(','));
         
         const queryString = params.toString();
-        const newUrl = queryString ? `?${queryString}` : '/product';
+        const newUrl = queryString ? `?${queryString}` : '/';
         
         router.replace(newUrl, { scroll: false });
     }, [sortBy, selectedCategory, priceRange, minRating, selectedColors, selectedSizes, router]);
