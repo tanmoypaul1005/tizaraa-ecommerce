@@ -50,17 +50,13 @@ export default function ProductDetailsPage() {
     if (!product) return;
 
     const selectedColorVariant = product.variants.colors.find(c => c.id === selectedColor);
-    const colorIndex = product.variants.colors.findIndex(c => c.id === selectedColor);
     
-    // If selected color has its own images, use only the first image from that variant
+    // If selected color has its own images, show all of them
     if (selectedColorVariant?.images && selectedColorVariant.images.length > 0) {
-      setDisplayImages([selectedColorVariant.images[0]]);
-    } else if (colorIndex >= 0 && colorIndex < product.images.length) {
-      // Use the image at the same index as the color
-      setDisplayImages([product.images[colorIndex]]);
+      setDisplayImages(selectedColorVariant.images);
     } else {
-      // Fallback to first image if index is out of range
-      setDisplayImages([product.images[0]]);
+      // If no variant images, show all default product images
+      setDisplayImages(product.images);
     }
   }, [selectedColor, product]);
 
